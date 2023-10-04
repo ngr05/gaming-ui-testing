@@ -1,0 +1,82 @@
+apiVersion: v1alpha
+kind: playwright
+sauce:
+  region: eu-central-1
+  concurrency: 4
+  metadata:
+    tags:
+      - e2e
+    build: "$BUILD_ID"
+  tunnel:
+    name: nick_green_tunnel
+    owner: sso-nicholas.green-bb555
+playwright:
+  version: package.json # See https://docs.saucelabs.com/web-apps/automated-testing/playwright/#supported-testing-platforms for a list of supported versions.
+  configFile: playwright.config.ts # See https://docs.saucelabs.com/web-apps/automated-testing/playwright/yaml/#configfile for a list of supported configuration files.
+# Controls what files are available in the context of a test run (unless explicitly excluded by .sauceignore).
+rootDir: ./
+suites:
+  - name: "Chromium Mac 13"
+    platformName: "macOS 13"
+    screenResolution: "1440x900"
+    testMatch: [".*.test.ts"]
+    params:
+      browserName: "chromium"
+      browserVersion: "latest"
+      project: "chromium"
+  - name: "Chromium Windows 11"
+    platformName: "Windows 11"
+    screenResolution: "1440x900"
+    testMatch: [".*.test.ts"]
+    params:
+      browserName: "chromium"
+      browserVersion: "latest"
+      project: "chromium"
+  - name: "Firefox Mac 13"
+    platformName: "macOS 13"
+    screenResolution: "1440x900"
+    testMatch: [".*.test.ts"]
+    params:
+      browserName: "firefox"
+      browserVersion: "latest"
+      project: "firefox"
+  - name: "Firefox Windows 11"
+    platformName: "Windows 11"
+    screenResolution: "1440x900"
+    testMatch: [".*.test.ts"]
+    params:
+      browserName: "firefox"
+      browserVersion: "latest"
+      project: "firefox"  # Runs the project that's defined in `playwright.config.js`
+
+  # - name: "Safari iOS"
+  #   platformName: "iOS"
+  #   screenResolution: "1440x900"
+  #   testMatch: [".*.test.ts"]
+  #   params:
+  #     browserName: "Safari"
+  #     browserVersion: "latest"
+  # - name: "iOS 16.2 iPhone"
+  #   platformName: "iOS",
+  #   testMatch: [".*.test.ts"]
+  #   devices:
+  #     - name: "iPhone.*"
+  #       platformVersion: "17"
+  #       options:
+  #         # Possible values [ANY, PHONE, TABLET]
+  #         deviceType: ANY
+  #         # If set, only private devices will be queried.
+  #         private: true
+    # "appium:deviceName": "iPhone Simulator",
+    # "appium:deviceOrientation": "portrait",
+    # "appium:platformVersion": "16.2",
+    # "appium:automationName": "XCUITest",
+    # params:
+    #   browserName: "Safari",
+npm:
+  dependencies:
+    # Following packages are required for running a playwright + cucumber test
+    - "typescript" # typescript support
+    - "ts-node" # typescript support
+    - "@playwright/test"
+    # You can append your npm dependencies
