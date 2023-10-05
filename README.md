@@ -58,10 +58,8 @@ Once the tunnel is started, the `SAUCE_TUNNEL_NAME` and the `SAUCE_TUNNEL_OWNER`
 the tests. For example...
 
 ```
-$ npm run test:sauce -- -e ENVIRONMENT=staging -e PRODUCT=vegas
+$ SAUCE_TUNNEL_NAME=nick_green_tunnel SAUCE_TUNNEL_OWNER=sso-nicholas.green-bb555 npm run test:sauce -- -e ENVIRONMENT=staging -e PRODUCT=vegas
 ```
-
-(To be confirmed)
 
 Note that we still need to pass in the environment and the product to run the tests against. These need to be passed
 into the `saucectl` application that will actually execute the tests. For this reason we need to delimit the npm command
@@ -102,7 +100,7 @@ issues before acceptance. At the time of writing this, that has not yet been imp
 
 ## Things To Do...
 
--   Make Sauce Labs tunnel config environment variables
+-   Effectively manage user accounts, aquiring before and releasing after tests
 -   Have them run against all environments
     -   Including Live 😬
 -   Implement promo tests
