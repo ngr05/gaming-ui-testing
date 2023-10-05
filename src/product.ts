@@ -1,7 +1,10 @@
 export let product: string;
 export let title: string;
 
-switch (process.env.PRODUCT) {
+const { ENVIRONMENT, PRODUCT } = process.env;
+let validEnvs = ['test2', 'staging', 'live'];
+
+switch (PRODUCT) {
     case 'bingo':
         product = 'skybingo';
         title = 'Sky Bingo';
@@ -10,6 +13,7 @@ switch (process.env.PRODUCT) {
     case 'casino':
         product = 'skycasino';
         title = 'Sky Casino';
+        validEnvs = ['next', 'live'];
         break;
 
     case 'vegas':
@@ -18,9 +22,11 @@ switch (process.env.PRODUCT) {
         break;
 
     default:
-        throw new Error('please specify a valid product under test');
+        throw new Error('please specify a valid product under test! (bingo, casino or vegas)');
 }
 
-export const url = `https://www.${
-    process.env.ENVIRONMENT !== 'live' ? `${process.env.ENVIRONMENT}.` : ''
-}${product}.com/`;
+if (!ENVIRONMENT || !validEnvs.includes(ENVIRONMENT)) {
+    throw new Error(`please specify a valid environment to run the tests on! (${validEnvs.join(', ')})`);
+}
+
+export const url = `https://www.${ENVIRONMENT !== 'live' ? `${ENVIRONMENT}.` : ''}${product}.com/`;

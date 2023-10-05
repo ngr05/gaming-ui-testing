@@ -1,11 +1,8 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator } from '@playwright/test';
+
 import PageObject from './object';
 
-export default class Homepage extends PageObject {
-    constructor(page: Page) {
-        super(page);
-    }
-
+export default abstract class Homepage extends PageObject {
     public async open() {
         return await super.open('');
     }
@@ -20,11 +17,12 @@ export default class Homepage extends PageObject {
         await this.myAccountBtn.click();
     }
 
-    /********************************************
-     * Locators                                 *
-     ********************************************/
+    /****************************************************************
+     * Locators                                                     *
+     * The locators here are either the most constent or from Vegas *
+     ****************************************************************/
     get balanceDisplay(): Locator {
-        return this.page.locator('p[data-qa="user-balance"]');
+        return this.page.locator('span[data-qa="user-balance"]');
     }
 
     get loginBtn(): Locator {

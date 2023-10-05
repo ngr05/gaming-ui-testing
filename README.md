@@ -102,7 +102,6 @@ issues before acceptance. At the time of writing this, that has not yet been imp
 
 ## Things To Do...
 
--   Define selectors per product
 -   Make Sauce Labs tunnel config environment variables
 -   Have them run against all environments
     -   Including Live 😬

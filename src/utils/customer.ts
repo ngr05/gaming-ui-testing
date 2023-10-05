@@ -42,9 +42,8 @@ const getEnvironment = (): UserEnvironments => {
         case 'live':
             return UserEnvironments.LIVE;
         case 'staging':
-        case 'next':
             return UserEnvironments.STAGING;
-        case 'test':
+        case 'next':
         case 'test2':
             return UserEnvironments.TEST;
         default:
