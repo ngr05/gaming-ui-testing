@@ -7,6 +7,7 @@
         "check:fix": "prettier . --write",
         "lint": "eslint .",
         "lint:fix": "npm run lint -- --fix",
+        "format": "npm run check:fix && npm run lint:fix",
         "test": "playwright test",
         "test:debug": "playwright test --debug",
         "test:dry": "saucectl run --dry-run",
@@ -25,6 +26,11 @@
         "test:vegas:staging": "ENVIRONMENT=staging PRODUCT=vegas npm test",
         "test:vegas:live": "ENVIRONMENT=live PRODUCT=vegas npm test",
         "prepare": "husky install"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "npm run format && git add -A"
+        }
     },
     "keywords": [],
     "author": "Nick Green <nicholas.green@flutteruki.com>",
