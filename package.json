@@ -27,11 +27,6 @@
         "test:vegas:live": "ENVIRONMENT=live PRODUCT=vegas npm test",
         "prepare": "husky install"
     },
-    "husky": {
-        "hooks": {
-            "pre-commit": "npm run format && git add -A"
-        }
-    },
     "keywords": [],
     "author": "Nick Green <nicholas.green@flutteruki.com>",
     "license": "ISC",
