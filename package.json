@@ -1,25 +1,33 @@
 {
-    "name": "v5---playwright-evo",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "name": "gaming-playwright-ui-tests",
+    "version": "0.0.1",
+    "description": "Gaming UI tests using Playwright",
     "scripts": {
         "check": "prettier . --check",
         "check:fix": "prettier . --write",
         "lint": "eslint .",
         "lint:fix": "npm run lint -- --fix",
-        "test": "playwright test --fully-parallel",
+        "test": "playwright test",
         "test:debug": "playwright test --debug",
         "test:dry": "saucectl run --dry-run",
         "test:sauce": "saucectl run",
         "test:ui": "playwright test --ui",
-        "test:precommit": "concurrently --kill-others \"npm run test:vegas:test\" \"npm run test:vegas:staging\"",
+        "test:precommit": "concurrently \"npm run test:bingo\" \"npm run test:casino\" \"npm run test:vegas\"",
+        "test:bingo": "concurrently \"npm run test:bingo:test\" \"npm run test:bingo:staging\" \"npm run test:bingo:live\"",
+        "test:bingo:test": "ENVIRONMENT=test2 PRODUCT=bingo npm test",
+        "test:bingo:staging": "ENVIRONMENT=staging PRODUCT=bingo npm test",
+        "test:bingo:live": "ENVIRONMENT=live PRODUCT=bingo npm test",
+        "test:casino": "concurrently \"npm run test:casino:next\" \"npm run test:casino:live\"",
+        "test:casino:next": "ENVIRONMENT=next PRODUCT=casino npm test",
+        "test:casino:live": "ENVIRONMENT=live PRODUCT=casino npm test",
+        "test:vegas": "concurrently \"npm run test:vegas:test\" \"npm run test:vegas:staging\" \"npm run test:vegas:live\"",
         "test:vegas:test": "ENVIRONMENT=test2 PRODUCT=vegas npm test",
         "test:vegas:staging": "ENVIRONMENT=staging PRODUCT=vegas npm test",
+        "test:vegas:live": "ENVIRONMENT=live PRODUCT=vegas npm test",
         "prepare": "husky install"
     },
     "keywords": [],
-    "author": "",
+    "author": "Nick Green <nicholas.green@flutteruki.com>",
     "license": "ISC",
     "devDependencies": {
         "@playwright/test": "^1.37.1",
@@ -35,5 +43,18 @@
         "saucectl": "^0.161.1",
         "ts-node": "^10.9.1",
         "typescript": "^5.2.2"
+    },
+    "engines": {
+        "node": ">=20.5.0"
+    },
+    "packageManager": "npm@9.8.0",
+    "homepage": "https://github.com/ngr05/gaming-ui-testing#readme",
+    "bugs": {
+        "url": "https://github.com/ngr05/gaming-ui-testing/issues",
+        "email": "nicholas.green@flutteruki.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ngr05/gaming-ui-testing.git"
     }
 }
