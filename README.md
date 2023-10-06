@@ -20,25 +20,30 @@ $ npm install
 The tests can be run either using the bundled Playwright browsers or using Sauce Labs. There are number of commands that
 have been created for either. They are the following...
 
-| Command            | Description                                                                       |
-| ------------------ | --------------------------------------------------------------------------------- |
-| test               | Runs the tests on within CLI                                                      |
-| test:debug         | Runs the tests in debug mode using the Playwright inspector                       |
-| test:dry           | Simulates a test run against Sauce Labs without running any tests to check config |
-| test:sauce         | Runs the tests in Sauce Labs against the product and environment specified        |
-| test:ui            | Uses the Playwright UI to run the tests on your local machine                     |
-| test:precommit     | Used before a commit to ensure the code itegrity (not yet implemented)            |
-| test:bingo         | Run the tests against all three Bingo environments concurrently                   |
-| test:bingo:test    | Run the tests against Bingo in Test                                               |
-| test:bingo:staging | Run the tests against Bingo in Staging                                            |
-| test:bingo:live    | Run the tests against Bingo in Live                                               |
-| test:casino        | Run the tests against both Casino environments concurrently                       |
-| test:casino:next   | Run the tests against Casino in the NEXT environment                              |
-| test:casino:live   | Run the tests against Casino in Live                                              |
-| test:vegas         | Run the tests against all three Vegas environments concurrently                   |
-| test:vegas:test    | Run the tests against Vegas in Test                                               |
-| test:vegas:staging | Run the tests against Vegas in Staging                                            |
-| test:vegas:live    | Run the tests against Vegas in Live                                               |
+| Command             | Description                                                                       |
+| ------------------- | --------------------------------------------------------------------------------- |
+| test                | Runs the tests on within CLI                                                      |
+| test:debug          | Runs the tests in debug mode using the Playwright inspector                       |
+| test:dry            | Simulates a test run against Sauce Labs without running any tests to check config |
+| test:sauce          | Runs the tests in Sauce Labs against the product and environment specified        |
+| test:ui             | Uses the Playwright UI to run the tests on your local machine                     |
+| test:precommit      | Used before a commit to ensure the code itegrity (not yet implemented)            |
+| test:prod           | Runs tests for all products in the production environment                         |
+| test:preprod        | Runs tests for all products in the preprod environments                           |
+| test:bingo          | Run the tests against all three Bingo environments concurrently                   |
+| test:bingo:test     | Run the tests against Bingo in Test                                               |
+| test:bingo:staging  | Run the tests against Bingo in Staging                                            |
+| test:bingo:live     | Run the tests against Bingo in Live                                               |
+| test:bingo:preprod  | Runs the tests for Bingo in all pre production environments                       |
+| test:casino         | Run the tests against both Casino environments concurrently                       |
+| test:casino:next    | Run the tests against Casino in the NEXT environment                              |
+| test:casino:live    | Run the tests against Casino in Live                                              |
+| test:casino:preprod | Runs the tests for Casino in all pre production environments                      |
+| test:vegas          | Run the tests against all three Vegas environments concurrently                   |
+| test:vegas:test     | Run the tests against Vegas in Test                                               |
+| test:vegas:staging  | Run the tests against Vegas in Staging                                            |
+| test:vegas:live     | Run the tests against Vegas in Live                                               |
+| test:vegas:preprod  | Runs the tests for Vegas in all pre production environments                       |
 
 In order to run the tests successfully, the environment variables `ENVIRONMENT` and `PRODUCT` must be set successfully.
 
@@ -123,8 +128,6 @@ issues before acceptance. At the time of writing this, that has not yet been imp
 
 ## Things To Do...
 
--   Have them run against all environments
-    -   Including Live 😬
 -   Implement promo tests
 -   Demonstrate CI capabilities of the tests
     -   Archive/store results
