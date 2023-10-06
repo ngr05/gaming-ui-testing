@@ -166,9 +166,6 @@ test('this is a test @silver @vegas @stage', async ({ homepage }) => {
 -   Demonstrate CI capabilities of the tests
     -   Archive/store results
     -   On failure, post to Slack
--   Filter tests
-    -   Per product
-    -   Gold/Silver/Bronze
 -   Report into Testrail
     -   Could we extend the `test` function to take in Testrail test IDs?
 -   Create a custom runner with commander?

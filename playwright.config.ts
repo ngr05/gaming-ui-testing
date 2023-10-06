@@ -6,11 +6,17 @@ import { defineConfig, devices } from '@playwright/test';
  */
 // require('dotenv').config();
 
+// Define the tests to be ignored. This will skip out the products that are not in test
+const products = ['bingo', 'casino', 'vegas'];
+products.splice(products.indexOf(process.env.PRODUCT || '', 0), 1);
+const testIgnore = new RegExp(`tests/${products.join('|tests/')}`);
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
     testDir: './tests',
+    testIgnore,
     /* Run tests in files in parallel */
     fullyParallel: true,
     /* Fail the build on CI if you accidentally left test.only in the source code. */
