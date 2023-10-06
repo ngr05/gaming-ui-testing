@@ -79,14 +79,40 @@ There is a custom fixture function that has been created to get a user account p
 accounts are released after each test. It is best to do this in the after each hook for the tests. For example...
 
 ```
-    test.afterEach(async ({ homepage }) => {
-        await releaseAccount((await homepage.getAccount()).username);
-    });
+test.afterEach(async ({ homepage }) => {
+    await releaseAccount((await homepage.getAccount()).username);
+});
 ```
 
 When using the custom fixtures, there is a method on the page object class that needs to be extended called `getAccount`
 that can be used to get the account for the test. It acts as a singleton. If there is a user already defined, it is
 returned. If there is not, it gets a new user account and stores it for us throughout the test.
+
+### Filtering
+
+There is the ability to filter tests on tags through all the start commands, apart from with Sauce Labs (only because I
+haven't fully investigated). To filter the `grep` option needs to be passed to Playwright. This can be done by
+delimiting the npm command and passing the option along with the tags to filter on. For example...
+
+```
+$ ENVIRONMENT=staging PRODUCT=vegas npm run test -- --grep "@login"
+```
+
+The tests that have the tag in their title will then be executed. This means that the test must look something like
+this...
+
+```
+test('@login', async ({ account, homepage }) => {
+    [...]
+});
+```
+
+If you would like to run multiple tags, the option is a regex. Therefore, multiple tags can be passed by separating them
+with a pipe. Eg.
+
+```
+$ ENVIRONMENT=staging PRODUCT=vegas npm run test -- --grep "@login|@logout"
+```
 
 ## Reporting
 
@@ -125,6 +151,14 @@ using either `npm run check` to check the code or again, `npm run check:fix` to 
 Before a commit will be accepted, the linter and styleing checks are executed to maintain standards. If there are any
 issues, these must be fixed before the commit will be accepted. Ideally, the tests will also be run and checked for
 issues before acceptance. At the time of writing this, that has not yet been implemented.
+
+### Tagging
+
+Tagging is done by adding tags to the title of tests. Each tag should begin with a `@` and be followed by the tag.
+
+```
+test('this is a test @silver @vegas @stage', async ({ homepage }) => {
+```
 
 ## Things To Do...
 
