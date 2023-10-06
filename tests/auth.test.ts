@@ -1,29 +1,19 @@
 // @ts-check
 
-import { expect } from '@playwright/test';
-
-import { test } from '../src/playwright';
-import { getAccount } from '../src/utils/customer';
+import { expect, test } from '../src/playwright';
 
 test.describe('Authentication tests', () => {
-    test.beforeEach(async ({ homepage }, testInfo) => {
-        console.log(`running ${testInfo.title}`);
-        await homepage.open();
-    });
-
-    test('login', async ({ homepage }) => {
+    test('login', async ({ account, homepage }) => {
         await homepage.openLogin();
-        const account = await getAccount();
         await homepage.sidebar.login(account);
 
         await expect(homepage.balanceDisplay).toBeVisible();
         await expect(homepage.myAccountBtn).toBeVisible();
     });
 
-    test('logout', async ({ homepage }) => {
+    test('logout', async ({ account, homepage }) => {
         // Login
         await homepage.openLogin();
-        const account = await getAccount();
         await homepage.sidebar.login(account);
 
         // Logout

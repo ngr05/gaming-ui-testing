@@ -22,14 +22,15 @@ export interface Customer {
 
 // The location of the automation user service.
 // Details and docs can be found here: https://stash.skybet.net/projects/GPERF/repos/aws-terraform-aus/browse
-const url = 'https://aus.live.skybet.net/v1/user';
+const url = 'https://aus.live.skybet.net/v1/';
 
 export const getAccount = async (type = UserAccountType.VERIFIED): Promise<Customer> => {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
     try {
-        const response = await fetch(`${url}?env=${getEnvironment()}&type=${type}`, { method: 'POST' });
-        return (await response.json()) as Customer;
+        const customer = (await makeRequest(`${url}user?env=${getEnvironment()}&type=${type}`)) as Customer;
+        console.debug(`testing with user ${customer.username}`);
+        return customer;
     } catch (e) {
         console.error('issue with getting account details for testing');
         console.error((e as Error).message);
@@ -48,5 +49,26 @@ const getEnvironment = (): UserEnvironments => {
             return UserEnvironments.TEST;
         default:
             throw new Error('please specify a valid environment to run the tests on!');
+    }
+};
+
+const makeRequest = async (url: string, options: object = {}): Promise<object> => {
+    const response = await fetch(url, { method: 'POST', ...options });
+    return (await response.json()) as object;
+};
+
+export const releaseAccount = async (account: Customer): Promise<void> => {
+    console.debug(`releasing account ${account.username}`);
+    try {
+        const result = (await makeRequest(`${url}release?env=${getEnvironment()}&username=${account.username}`)) as {
+            message: string;
+        };
+        if (result.message !== 'Success') {
+            console.error('response from release', JSON.stringify(result));
+            throw new Error('no success message from the service when releasing!');
+        }
+        console.debug(`account ${account.username} released`);
+    } catch (e) {
+        console.warn(`unable to release account ${account.username}! ${(e as Error).message}`);
     }
 };

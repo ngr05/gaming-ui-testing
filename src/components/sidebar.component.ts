@@ -53,7 +53,7 @@ export default class Sidebar extends ComponentObject {
     }
 
     get myAccountIndicator(): Locator {
-        return this.frame.locator('.sba-open');
+        return this.page.locator('.sba-open');
     }
 
     get frame(): FrameLocator {

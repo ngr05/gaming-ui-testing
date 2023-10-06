@@ -70,6 +70,19 @@ and pass in the variables as options as seen above.
 The accounts used for testing are all stored and maintained using the
 [Automated User Service](https://stash.skybet.net/projects/GPERF/repos/aws-terraform-aus/browse).
 
+There is a custom fixture function that has been created to get a user account per test. It is imperative that the
+accounts are released after each test. It is best to do this in the after each hook for the tests. For example...
+
+```
+    test.afterEach(async ({ homepage }) => {
+        await releaseAccount((await homepage.getAccount()).username);
+    });
+```
+
+When using the custom fixtures, there is a method on the page object class that needs to be extended called `getAccount`
+that can be used to get the account for the test. It acts as a singleton. If there is a user already defined, it is
+returned. If there is not, it gets a new user account and stores it for us throughout the test.
+
 ## Reporting
 
 When running tests locally, Playwright reports for the tests can be inspected. They will not open post run but can be
@@ -81,6 +94,16 @@ Ultimately, we would like to report the running of tests within Testrail. At the
 implemented but is certainly a must have.
 
 ## Development
+
+### Custom Fixtures
+
+Details on fixtures can be found [here](https://playwright.dev/docs/test-fixtures). The custom fixtures for this repo
+can be found at `src/playwright.ts`. The use of fixtures means that we can set up the environment on a per test basis so
+that each test is isolated and can focus on testing the functionality in front of it.
+
+There is a custom worker that has been defined for handling user accounts per worker. This means that a single user
+account will be allocated to a worker and can then be used for all tests carried out by that worker. Once the worker has
+completed its workload, the account is then released to be utilised by any other tests.
 
 ### Linting
 
@@ -100,7 +123,6 @@ issues before acceptance. At the time of writing this, that has not yet been imp
 
 ## Things To Do...
 
--   Effectively manage user accounts, aquiring before and releasing after tests
 -   Have them run against all environments
     -   Including Live 😬
 -   Implement promo tests
