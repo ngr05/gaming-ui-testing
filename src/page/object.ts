@@ -4,6 +4,8 @@ import { join } from 'path';
 import CookieBanner from '../components/cookieBanner.component';
 import Sidebar from '../components/sidebar.component';
 import { url } from '../product';
+import { Cookie } from '../config/cookies';
+import { Customer } from '../utils/customer';
 
 export default abstract class PageObject {
     readonly page: Page;
@@ -16,6 +18,11 @@ export default abstract class PageObject {
 
         this.cookieBanner = new CookieBanner(page);
         this.sidebar = new Sidebar(page);
+    }
+
+    public async login(account: Customer): Promise<void> {
+        await new Promise((res) => res('dummy promise for linting'));
+        console.log('logging customer in', JSON.stringify(account));
     }
 
     public async open(path: string) {
@@ -35,5 +42,10 @@ export default abstract class PageObject {
     public async rejectCookies() {
         await this.cookieBanner.manageCookiesBtn.click();
         await this.cookieBanner.rejectAllBtn.click();
+    }
+
+    public async addCookie(cookie: Cookie) {
+        await this.page.context().addCookies([...(await this.page.context().cookies(url)), cookie]);
+        await this.page.reload();
     }
 }

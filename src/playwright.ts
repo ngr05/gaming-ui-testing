@@ -1,18 +1,18 @@
 import { test as base } from '@playwright/test';
 
-import Setup from './utils/setup';
-
+import { getHomepage, getPromotionsPage } from './page/factory';
 import Homepage from './page/home.page';
-import BingoHomepage from './page/bingo/home.page';
-import CasinoHomepage from './page/casino/home.page';
-import VegasHomepage from './page/vegas/home.page';
+import Setup from './utils/setup';
 import { Customer, getAccount, releaseAccount } from './utils/customer';
+import Promotions from './page/promotions.page';
+import { newPromotionsListPage } from './config/cookies';
 
 export { expect } from '@playwright/test';
 
 interface CustomFixtures {
     setup: Setup;
     homepage: Homepage;
+    promoPage: Promotions;
 }
 
 interface CustomWorkerFixtures {
@@ -39,22 +39,16 @@ export const test = base.extend<CustomFixtures, CustomWorkerFixtures>({
     },
 
     homepage: async ({ page }, use) => {
-        let homepage: Homepage;
-        switch (process.env.PRODUCT) {
-            case 'bingo':
-                homepage = new BingoHomepage(page);
-                break;
-            case 'casino':
-                homepage = new CasinoHomepage(page);
-                break;
-            case 'vegas':
-                homepage = new VegasHomepage(page);
-                break;
-            default:
-                throw new Error('cannot work out the right home page instance!');
-        }
-
+        const homepage: Homepage = getHomepage(page);
         await homepage.open();
         await use(homepage);
+    },
+
+    promoPage: async ({ page, setup }, use) => {
+        const promoPage: Promotions = getPromotionsPage(page);
+        await promoPage.open();
+        await setup.setDefaultCookies();
+        await promoPage.addCookie(newPromotionsListPage);
+        await use(promoPage);
     },
 });
