@@ -1,7 +1,8 @@
 import { Locator } from '@playwright/test';
-import Homepage from '../home.page';
 
-export default class BingoHomepage extends Homepage {
+import ProductContainer from '../productContainer.component';
+
+export default class BingoHomepage extends ProductContainer {
     /********************************************
      * Locators                                 *
      ********************************************/

@@ -6,11 +6,11 @@ import PageObject from './object';
 export default abstract class Promotions extends PageObject {
     readonly exclusivePromoHeading = 'Exclusively for you';
 
-    public async open() {
-        return await super.open('promotions');
+    public async goTo(): Promise<void> {
+        return await super.goTo('promotions');
     }
 
-    public async selectCardAndVerify(card: Locator) {
+    public async selectCardAndVerify(card: Locator): Promise<void> {
         await card.waitFor();
         const slug = await this.cardLinks.first().getAttribute('href');
         const tag = await this.cardLinks.first().getAttribute('data-qa');
@@ -22,7 +22,7 @@ export default abstract class Promotions extends PageObject {
         expect(this.page.url()).toMatch(new RegExp(`.+${slug}?$`));
     }
 
-    public async selectPromoCard(tag: string) {
+    public async selectPromoCard(tag: string): Promise<void> {
         const selector = `a[data-qa="${tag}"]`;
         const card: Locator = this.page.locator(selector);
         await card.waitFor();

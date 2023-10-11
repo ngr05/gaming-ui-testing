@@ -3,25 +3,24 @@
 import { expect, test } from '../src/playwright';
 
 test.describe('Authentication tests', () => {
-    test('login', async ({ account, homepage }) => {
-        await homepage.openLogin();
-        await homepage.sidebar.login(account);
+    test('login', async ({ account, container, homepage }) => {
+        await homepage.goTo();
+        await container.login(account);
 
-        await expect(homepage.balanceDisplay).toBeVisible();
-        await expect(homepage.myAccountBtn).toBeVisible();
+        await expect(container.balanceDisplay).toBeVisible();
+        await expect(container.myAccountBtn).toBeVisible();
     });
 
-    test('logout', async ({ account, homepage }) => {
+    test('logout', async ({ account, container, homepage }) => {
         // Login
-        await homepage.openLogin();
-        await homepage.sidebar.login(account);
+        await homepage.goTo();
+        await container.login(account);
 
         // Logout
-        await homepage.openMyAccount();
-        await homepage.sidebar.logout();
+        await container.logout();
 
-        await expect(homepage.loginBtn).toBeVisible();
-        await expect(homepage.balanceDisplay).toBeHidden();
-        await expect(homepage.myAccountBtn).toBeHidden();
+        await expect(container.loginBtn).toBeVisible();
+        await expect(container.balanceDisplay).toBeHidden();
+        await expect(container.myAccountBtn).toBeHidden();
     });
 });

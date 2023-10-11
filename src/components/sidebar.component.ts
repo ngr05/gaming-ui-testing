@@ -8,22 +8,23 @@ export default class Sidebar extends ComponentObject {
         super(page);
     }
 
-    public async waitToBeClosed() {
+    public async waitToBeClosed(): Promise<void> {
         await this.myAccountIndicator.isHidden();
     }
 
-    public async waitToBeOpen() {
+    public async waitToBeOpen(): Promise<void> {
         await this.myAccountIndicator.isVisible();
     }
 
-    public async login(account: Customer) {
+    public async performLogin(account: Customer): Promise<void> {
         await this.waitToBeOpen();
         await this.usernameInput.fill(account.username);
         await this.pinInput.fill(account.pin);
         await this.loginBtn.click();
+        await this.waitToBeClosed();
     }
 
-    public async logout() {
+    public async performLogout(): Promise<void> {
         await this.waitToBeOpen();
         await this.logoutBtn.click();
         await this.waitToBeClosed();

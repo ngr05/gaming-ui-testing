@@ -7,6 +7,18 @@ export default class CookieBanner extends ComponentObject {
         super(page);
     }
 
+    public async acceptCookies(): Promise<void> {
+        if (await this.banner.isHidden()) {
+            return;
+        }
+        await this.acceptAllBtn.click();
+    }
+
+    public async rejectCookies(): Promise<void> {
+        await this.manageCookiesBtn.click();
+        await this.rejectAllBtn.click();
+    }
+
     /********************************************
      * Locators                                 *
      ********************************************/
