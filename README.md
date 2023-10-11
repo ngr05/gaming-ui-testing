@@ -169,3 +169,43 @@ test('this is a test @silver @vegas @stage', async ({ homepage }) => {
 -   Report into Testrail
     -   Could we extend the `test` function to take in Testrail test IDs?
 -   Create a custom runner with commander?
+
+## Jenkins
+
+In order to work on a Jenkins Pipeline to run the tests, I have used a dockerised version in order to test. I used
+[these docs](https://www.jenkins.io/doc/book/installing/docker/) to run the instance. To start this instance, just run
+`./jenkins/start-dev.sh`.
+
+This will start an instance of Jenkins at http://localhost:8080. The admin password will be output at the end of the dev
+script.
+
+While developing the script, it is best advised to develop the pipeline through the UI directly before storing it in
+this repo.
+
+### Required Plugins
+
+-   Slack Notification
+
+### Initial Job Setup
+
+1. Go to [http://localhost:8080](http://localhost:8080)
+2. Input the admin password
+3. Install suggested plugins and wait for them to install
+4. Select `Skip and continue as admin`
+5. `Save and Finish`
+6. `Start using Jenkins`
+7. `Create a job`
+8. Select `Pipeline` and give the job the name `ui-tests`
+9. Select `Discard old builds` and set `Max # of builds to keep` to 10
+10. Select `GitHub project` and set to `https://github.com/ngr05/gaming-ui-testing/`
+11. Select `This project is parameterised`
+12. Create a string parameter called `BRANCH` with the default value set to `main`
+13. Create a choice parameter called `PRODUCT` with the options `bingo`, `casino` and `vegas`
+14. Create a choice parameter called `ENVIRONMENT` with the options `live`, `staging`, `next` and `test`
+
+#### Running the Pipeline from Version Control
+
+1. Select the pipeline definition to `Pipeline script from SCM`
+2. Set the repository URL to `https://github.com/ngr05/gaming-ui-testing.git`
+3. Set the `Branch Specifier` to `*/$BRANCH`
+4. Set the `Script Path` to `jenkins/Jenkinsfile`

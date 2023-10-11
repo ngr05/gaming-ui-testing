@@ -1,0 +1,66 @@
+pipeline {
+    agent {
+        docker {
+            args '--net host -u root:root'
+            image 'mcr.microsoft.com/playwright:v1.38.1-jammy'
+        }
+    }
+
+    environment {
+        CI = 1
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+        timeout(time: 5, unit: 'MINUTES')
+    }
+
+    parameters {
+        string(name: 'branch', defaultValue: 'main', description: 'The branch to use for testing')
+        choice(name: 'product', choices: ['bingo', 'casino', 'vegas', ''], description: 'The product to be tested')
+        choice(name: 'environment', choices: ['live', 'staging', 'next', 'test', 'prod', 'preprod'], description: 'The environment to test')
+    }
+
+    stages {
+        stage('initialize') {
+            steps {
+                script {
+                    git branch: 'main',
+                        url: 'https://github.com/ngr05/gaming-ui-testing.git'
+                        branch: params.branch
+                }
+                sh 'npm install'
+            }
+        }
+
+        stage('run tests') {
+            steps {
+                script {
+                    try {
+                        sh "npm run test:${params.product}:${params.environment}"
+                    } catch (err) {
+                        echo "Failed: ${err}"
+                        currentBuild.result = 'FAILURE'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'test-results/**', followSymlinks: false
+        }
+
+        // failure {
+        //     script {
+        //         slack.send([
+        //             channel: '#gaming-ui-testing',
+        //             username: 'Jenkins Runner',
+        //             icon_emoji: ':failed:',
+        //             text: "❌ Gaming UI Testing has failed! (Environment: ${params.environment}, Product: ${params.product})"
+        //         ])
+        //     }
+        // }
+    }
+}

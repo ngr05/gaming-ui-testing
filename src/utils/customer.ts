@@ -29,7 +29,6 @@ export const getAccount = async (type = UserAccountType.VERIFIED): Promise<Custo
 
     try {
         const customer = (await makeRequest(`${url}user?env=${getEnvironment()}&type=${type}`)) as Customer;
-        console.debug(`testing with user ${customer.username}`);
         return customer;
     } catch (e) {
         console.error('issue with getting account details for testing');
@@ -58,7 +57,6 @@ const makeRequest = async (url: string, options: object = {}): Promise<object> =
 };
 
 export const releaseAccount = async (account: Customer): Promise<void> => {
-    console.debug(`releasing account ${account.username}`);
     try {
         const result = (await makeRequest(`${url}release?env=${getEnvironment()}&username=${account.username}`)) as {
             message: string;
@@ -67,7 +65,6 @@ export const releaseAccount = async (account: Customer): Promise<void> => {
             console.error('response from release', JSON.stringify(result));
             throw new Error('no success message from the service when releasing!');
         }
-        console.debug(`account ${account.username} released`);
     } catch (e) {
         console.warn(`unable to release account ${account.username}! ${(e as Error).message}`);
     }

@@ -24,13 +24,13 @@ interface CustomWorkerFixtures {
 export const test = base.extend<CustomFixtures, CustomWorkerFixtures>({
     account: [
         async ({}, use, info) => {
-            console.debug(`[worker: ${info.workerIndex}] getting user for worker`);
             const account = await getAccount();
             console.debug(`[worker: ${info.workerIndex}] user ${account.username} sourced, testing...`);
             await use(account);
-            console.debug(`[worker: ${info.workerIndex}] completed testing for the worker`);
             await releaseAccount(account);
-            console.debug(`[worker: ${info.workerIndex}] user account released (${account.username})`);
+            console.debug(
+                `[worker: ${info.workerIndex}] completed testing for the worker and user account released (${account.username})`,
+            );
         },
         { scope: 'worker' },
     ],
