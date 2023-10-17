@@ -163,8 +163,9 @@ test('this is a test @silver @vegas @stage', async ({ homepage }) => {
 ## Things To Do...
 
 -   Implement promo tests
+    -   Bingo
+    -   Casino
 -   Demonstrate CI capabilities of the tests
-    -   Archive/store results
     -   On failure, post to Slack
 -   Report into Testrail
     -   Could we extend the `test` function to take in Testrail test IDs?
@@ -184,9 +185,11 @@ this repo.
 
 ### Required Plugins
 
+-   Badge
+-   Parameterized Scheduler
 -   Slack Notification
 
-### Initial Job Setup
+### Initial Dev Job Setup
 
 1. Go to [http://localhost:8080](http://localhost:8080)
 2. Input the admin password
@@ -196,16 +199,74 @@ this repo.
 6. `Start using Jenkins`
 7. `Create a job`
 8. Select `Pipeline` and give the job the name `ui-tests`
-9. Select `Discard old builds` and set `Max # of builds to keep` to 10
-10. Select `GitHub project` and set to `https://github.com/ngr05/gaming-ui-testing/`
-11. Select `This project is parameterised`
-12. Create a string parameter called `BRANCH` with the default value set to `main`
-13. Create a choice parameter called `PRODUCT` with the options `bingo`, `casino` and `vegas`
-14. Create a choice parameter called `ENVIRONMENT` with the options `live`, `staging`, `next` and `test`
+9. Copy the pipeline as is from `jenkins/Jenkinsfile` into the Pipeline script at the bottom of the configuration page
+10. `Save`
 
-#### Running the Pipeline from Version Control
+Once the job is run for the first time, it will pick up the parameters and configuration.
+
+### Running the Pipeline from Version Control
 
 1. Select the pipeline definition to `Pipeline script from SCM`
 2. Set the repository URL to `https://github.com/ngr05/gaming-ui-testing.git`
 3. Set the `Branch Specifier` to `*/$BRANCH`
 4. Set the `Script Path` to `jenkins/Jenkinsfile`
+
+### Scheduling
+
+The syntax for scheduling is as follows...
+
+```
+┌--------------- minute (0 - 59)
+| ┌-------------- hour (0 - 23)
+| | ┌------------ day of month (1 - 31)
+| | | ┌---------- month (1 - 12) OR jan,feb,mar ...
+| | | | ┌-------- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue ...
+| | | | |
+* * * * * command to be executed
+```
+
+There are several predefined values that can be used to instead of the Cron expression in Jenkins...
+
+| Entry     | Description                                   | Equivalent to |
+| --------- | --------------------------------------------- | ------------- |
+| @yearly   | Run at any time during the year               | H H H H \*    |
+| @annually | Run at any time during the year               | H H H H \*    |
+| @monthly  | Run at any time during the month              | H H H \* \*   |
+| @weekly   | Run at any time during the week               | H H \* \* H   |
+| @daily    | Run at any time during the day                | H H \* \* \*  |
+| @midnight | Run at some time between 12:00 AM and 2:59 AM |               |
+| @hourly   | Run at any time during the hour               | H \* \* \* \* |
+
+Here are some example schedules...
+
+| Schedule          | Job                                            |
+| ----------------- | ---------------------------------------------- |
+| \* \* \* \* \*    | Run cron job every minute                      |
+| \*/5 \* \* \* \*  | Run cron job every 5 minutes                   |
+| \*/30 \* \* \* \* | Run cron job every 30 minutes                  |
+| 0 \* \* \* \*     | Run cron job every hour                        |
+| 0 \*/3 \* \* \*   | Run cron job every 3 hours                     |
+| 0 13 \* \* \*     | Run cron job every day at 1pm                  |
+| 30 2 \* \* \*     | Run cron job every day at 2.30am               |
+| 0 0 \* \* \*      | Run cron job every day at midnight             |
+| 0 0 \* \* 0       | Run cron job every Sunday                      |
+| 0 0 \* \* 1       | Run cron job every Monday                      |
+| 0 0 1 \* \*       | Run cron job every first day of every month    |
+| 0 0 1 1 \*        | Run cron job every first of January every year |
+
+> To allow periodically scheduled tasks to produce even load on the system, the symbol H (for “hash”) should be used
+> wherever possible. For example, using 0 0 \* \* \* for a dozen daily jobs will cause a large spike at midnight. In
+> contrast, using H H \* \* \* would still execute each job once a day, but not all at the same time, better using
+> limited resources.
+
+> The `H` symbol can be thought of as a random value over a range, but it actually is a hash of the job name, not a
+> random function, so that the value remains stable for any given project.
+
+In order to start builds with parameters with the scheduler, the schedule should be delimited with the `%` character
+with the parameters separated by a semi-colon. For example, to run the tests against Bingo on Staging hourly...
+
+```
+H * * * * % environment=staging;product=bingo
+```
+
+Info taken from [Shell Hacks](https://www.shellhacks.com/jenkins-schedule-build-periodically-parameters/).

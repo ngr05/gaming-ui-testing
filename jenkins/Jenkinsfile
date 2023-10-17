@@ -1,8 +1,24 @@
+// .---------------- minute (0 - 59)
+// | .-------------- hour (0 - 23)
+// | | .------------ day of month (1 - 31)
+// | | | .---------- month (1 - 12) OR jan,feb,mar ...
+// | | | | .-------- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue ...
+// | | | | |
+// * * * * * command to be executed
+CRON_SETTINGS = '''0 * * * * % product=bingo;environment=test
+5 * * * * % product=bingo;environment=staging
+10 * * * * % product=bingo;environment=live
+15 * * * * % product=casino;environment=next
+20 * * * * % product=casino;environment=live
+25 * * * * % product=vegas;environment=test
+30 * * * * % product=vegas;environment=staging
+35 * * * * % product=vegas;environment=live'''
+
 pipeline {
     agent {
         docker {
             args '--net host -u root:root'
-            image 'mcr.microsoft.com/playwright:v1.38.1-jammy'
+            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
         }
     }
 
@@ -11,7 +27,11 @@ pipeline {
     }
 
     options {
-        buildDiscarder(logRotator(numToKeepStr: '5'))
+        buildDiscarder(logRotator(
+            daysToKeepStr: '7',         // history is only kept up to this days.
+            numToKeepStr: '100',        // only this number of build logs are kept.
+            artifactDaysToKeepStr: '7'  // artifacts are only kept up to this days.
+        ))
         timeout(time: 5, unit: 'MINUTES')
     }
 
@@ -21,10 +41,19 @@ pipeline {
         choice(name: 'environment', choices: ['live', 'staging', 'next', 'test', 'prod', 'preprod'], description: 'The environment to test')
     }
 
+    triggers {
+        parameterizedCron(CRON_SETTINGS)
+    }
+
     stages {
         stage('initialize') {
             steps {
                 script {
+                    currentBuild.displayName = "Gaming UI Tests - ${params.product} ${params.environment} (${params.branch})"
+                    addShortText(text: "branch: ${params.branch}")
+                    addShortText(text: "product: ${params.product}")
+                    addShortText(text: "environment: ${params.environment}")
+
                     git branch: 'main',
                         url: 'https://github.com/ngr05/gaming-ui-testing.git'
                         branch: params.branch
@@ -38,6 +67,10 @@ pipeline {
                 script {
                     try {
                         sh "npm run test:${params.product}:${params.environment}"
+                        def fails = sh returnStdout: true, script: 'find test-results -type f | wc -l'
+                        if (fails.toInteger() > 0) {
+                            throw new Exception('test failures found')
+                        }
                     } catch (err) {
                         echo "Failed: ${err}"
                         currentBuild.result = 'FAILURE'
@@ -49,7 +82,8 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'test-results/**', followSymlinks: false
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'test-results/**/*.*, playwright-report/**/*.*', followSymlinks: false
+            sh 'rm -rf ./* ./.[a-zA-Z0-9]*'
         }
 
         // failure {
