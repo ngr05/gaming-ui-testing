@@ -4,9 +4,9 @@ import ProductContainer from '../components/productContainer.component';
 
 import Promotions from '../page/promotions.page';
 
-import BingoProductContainer from '../components/bingo/productContainer.component';
-import CasinoProductContainer from '../components/casino/productContainer.component';
-import VegasProductContainer from '../components/vegas/productContainer.component';
+import BingoContainer from '../components/bingo/productContainer.component';
+import CasinoContainer from '../components/casino/productContainer.component';
+import VegasContainer from '../components/vegas/productContainer.component';
 
 import BingoPromotions from '../page/bingo/promo.page';
 import CasinoPromotions from '../page/casino/promo.page';
@@ -15,11 +15,11 @@ import VegasPromotions from '../page/vegas/promo.page';
 export const getProductContainer = (page: Page): ProductContainer => {
     switch (process.env.PRODUCT) {
         case 'bingo':
-            return new BingoProductContainer(page);
+            return new BingoContainer(page);
         case 'casino':
-            return new CasinoProductContainer(page);
+            return new CasinoContainer(page);
         case 'vegas':
-            return new VegasProductContainer(page);
+            return new VegasContainer(page);
         default:
             throw new Error('cannot work out the right home page instance!');
     }

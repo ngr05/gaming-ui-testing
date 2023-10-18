@@ -5,7 +5,7 @@ import { test } from '../../src/playwright';
 // PLP = Promotions List Page
 // PDP = Promotion Details Page
 
-test.describe('Promotion tests', () => {
+test.describe('Sky Vegas promotion tests', () => {
     test('Test that as a guest clicking on a PLP card will go to PDP @test @staging @live @mobile @tablet @desktop', async ({
         promoPage,
     }) => {

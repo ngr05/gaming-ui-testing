@@ -25,11 +25,13 @@ export const test = base.extend<CustomFixtures, CustomWorkerFixtures>({
     account: [
         async ({}, use, info) => {
             const account = await getAccount();
-            console.debug(`[worker: ${info.workerIndex}] user ${account.username} sourced, testing...`);
+            console.debug(
+                `[worker: ${info.workerIndex}] [browser: ${info.project.name}] user ${account.username} sourced, testing...`,
+            );
             await use(account);
             await releaseAccount(account);
             console.debug(
-                `[worker: ${info.workerIndex}] completed testing for the worker and user account released (${account.username})`,
+                `[worker: ${info.workerIndex}] [browser: ${info.project.name}] completed testing for the worker and user account released (${account.username})`,
             );
         },
         { scope: 'worker' },

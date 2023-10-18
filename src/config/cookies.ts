@@ -31,3 +31,7 @@ export const newPromotionsListPage = {
     url,
     value: '1',
 };
+
+export const getCookieObject = (name: string, value: string): Cookie => {
+    return { name, url, value };
+};

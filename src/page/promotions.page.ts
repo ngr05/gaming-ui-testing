@@ -34,6 +34,32 @@ export default abstract class Promotions extends PageObject {
      * Locators                                                     *
      * The locators here are either the most constent or from Vegas *
      ****************************************************************/
+    // Casino
+    get activePromosGrid(): Locator {
+        return this.page.locator('div[data-qa="promotion-grid-active"]');
+    }
+
+    get availablePromosGrid(): Locator {
+        return this.page.locator('div[data-qa="promotion-grid-available"]');
+    }
+
+    get featuredPromosGrid(): Locator {
+        return this.page.locator('div[data-qa="promotion-grid-featured"]');
+    }
+
+    get promoDetailsPage(): Locator {
+        return this.page.locator('section[data-track="Promotion Detail"]');
+    }
+
+    get promoTile(): Locator {
+        return this.page.locator('div[data-qa="promotion-tile"]');
+    }
+
+    get promoTimer(): Locator {
+        return this.page.locator('div[data-qa="time-left"]');
+    }
+
+    // Vegas
     get cardLinks(): Locator {
         return this.page.locator('a[data-qa^="pr-card-link-"]');
     }

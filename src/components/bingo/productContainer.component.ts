@@ -2,7 +2,7 @@ import { Locator } from '@playwright/test';
 
 import ProductContainer from '../productContainer.component';
 
-export default class BingoHomepage extends ProductContainer {
+export default class BingoContainer extends ProductContainer {
     /********************************************
      * Locators                                 *
      ********************************************/

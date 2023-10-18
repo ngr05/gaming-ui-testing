@@ -27,13 +27,21 @@ export default defineConfig({
     workers: 10,
     // workers: process.env.CI ? 1 : undefined,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-    reporter: [['html', { open: 'never' }]],
+    reporter: [
+        ['list', { printSteps: true }],
+        ['html', { open: 'never' }],
+        ['json', { outputFile: 'playwright-report/results.json' }],
+        ['junit', { outputFile: 'playwright-report/results.xml' }],
+    ],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
         /* Base URL to use in actions like `await page.goto('/')`. */
         // baseURL: 'http://127.0.0.1:3000',
 
-        screenshot: 'only-on-failure',
+        screenshot: {
+            mode: 'on',
+            fullPage: true,
+        },
         video: 'retain-on-failure',
         trace: 'retain-on-failure',
     },
@@ -82,4 +90,9 @@ export default defineConfig({
     //   url: 'http://127.0.0.1:3000',
     //   reuseExistingServer: !process.env.CI,
     // },
+
+    // Extended timeouts
+    // This is due to the amount of time that it takes for the portals to fully load and populate with content
+    timeout: 60000,
+    expect: { timeout: 10000 },
 });

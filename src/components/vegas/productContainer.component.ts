@@ -2,7 +2,7 @@ import { Locator } from '@playwright/test';
 
 import ProductContainer from '../productContainer.component';
 
-export default class VegasHomepage extends ProductContainer {
+export default class VegasContainer extends ProductContainer {
     /********************************************
      * Locators                                 *
      ********************************************/

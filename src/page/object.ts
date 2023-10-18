@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 import { join } from 'path';
 
 import CookieBanner from '../components/cookieBanner.component';
@@ -22,7 +22,8 @@ export default abstract class PageObject {
     }
 
     public async addCookie(cookie: Cookie): Promise<void> {
-        await this.page.context().addCookies([...(await this.page.context().cookies(url)), cookie]);
+        const currentCookies = await this.page.context().cookies(url);
+        await this.page.context().addCookies([...currentCookies, cookie]);
         await this.page.reload();
     }
 
@@ -35,7 +36,14 @@ export default abstract class PageObject {
                 this.cookiesDismissed = true;
             }
         } catch (e) {
-            console.error('There was the following error with the cookie banner. Was it there?');
+            if (await this.geoBlockedHeader.isVisible()) {
+                throw new Error('site geo blocked!');
+            }
+            const path = `test-results/cookie-banner-error-${new Date().getTime()}.png`;
+            await this.page.screenshot({ path });
+            console.error(
+                `There was the following error with the cookie banner. Was it there?\n    See screenshot ${path}`,
+            );
             console.error((e as Error).message);
         }
     }
@@ -44,4 +52,9 @@ export default abstract class PageObject {
      * Locators                                                     *
      * These need to be dfined on a product by product basis.       *
      ****************************************************************/
+    get geoBlockedHeader(): Locator {
+        return this.page.getByRole('heading', {
+            name: "WE'RE UNAVAILABLE IN YOUR LOCATION",
+        });
+    }
 }

@@ -164,7 +164,6 @@ test('this is a test @silver @vegas @stage', async ({ homepage }) => {
 
 -   Implement promo tests
     -   Bingo
-    -   Casino
 -   Demonstrate CI capabilities of the tests
     -   On failure, post to Slack
 -   Report into Testrail
