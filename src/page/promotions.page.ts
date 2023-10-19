@@ -34,6 +34,15 @@ export default abstract class Promotions extends PageObject {
      * Locators                                                     *
      * The locators here are either the most constent or from Vegas *
      ****************************************************************/
+    // Bingo
+    get currentPromoList(): Locator {
+        return this.page.locator('ul.current-promos');
+    }
+
+    get promoImage(): Locator {
+        return this.page.locator('a[data-track-category="Promotion Grid Image"]');
+    }
+
     // Casino
     get activePromosGrid(): Locator {
         return this.page.locator('div[data-qa="promotion-grid-active"]');

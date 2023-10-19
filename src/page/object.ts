@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { Page } from '@playwright/test';
 import { join } from 'path';
 
 import CookieBanner from '../components/cookieBanner.component';
@@ -12,7 +12,7 @@ export default abstract class PageObject {
     readonly cookieBanner: CookieBanner;
     readonly sidebar: Sidebar;
 
-    private cookiesDismissed = false;
+    // private cookiesDismissed = false;
 
     constructor(page: Page) {
         this.page = page;
@@ -29,32 +29,33 @@ export default abstract class PageObject {
 
     public async goTo(path: string): Promise<void> {
         await this.page.goto(join(url, path));
-        try {
-            if (!this.cookiesDismissed) {
-                await this.cookieBanner.banner.waitFor({ timeout: 3000 });
-                await this.cookieBanner.acceptCookies();
-                this.cookiesDismissed = true;
-            }
-        } catch (e) {
-            if (await this.geoBlockedHeader.isVisible()) {
-                throw new Error('site geo blocked!');
-            }
-            const path = `test-results/cookie-banner-error-${new Date().getTime()}.png`;
-            await this.page.screenshot({ path });
-            console.error(
-                `There was the following error with the cookie banner. Was it there?\n    See screenshot ${path}`,
-            );
-            console.error((e as Error).message);
-        }
+        this.cookieBanner.dismissIfVisible().catch((err) => console.error(err));
+        // try {
+        //     if (!this.cookiesDismissed) {
+        //         await this.cookieBanner.banner.waitFor({ timeout: 3000 });
+        //         await this.cookieBanner.acceptCookies();
+        //         this.cookiesDismissed = true;
+        //     }
+        // } catch (e) {
+        //     if (await this.geoBlockedHeader.isVisible()) {
+        //         throw new Error('site geo blocked!');
+        //     }
+        //     const path = `test-results/cookie-banner-error-${new Date().getTime()}.png`;
+        //     await this.page.screenshot({ path });
+        //     console.error(
+        //         `There was the following error with the cookie banner. Was it there?\n    See screenshot ${path}`,
+        //     );
+        //     console.error((e as Error).message);
+        // }
     }
 
     /****************************************************************
      * Locators                                                     *
      * These need to be dfined on a product by product basis.       *
      ****************************************************************/
-    get geoBlockedHeader(): Locator {
-        return this.page.getByRole('heading', {
-            name: "WE'RE UNAVAILABLE IN YOUR LOCATION",
-        });
-    }
+    // get geoBlockedHeader(): Locator {
+    //     return this.page.getByRole('heading', {
+    //         name: "WE'RE UNAVAILABLE IN YOUR LOCATION",
+    //     });
+    // }
 }

@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test';
 
-import { getProductContainer, getPromotionsPage } from './utils/factory';
+import { getHomePage, getProductContainer, getPromotionsPage } from './utils/factory';
 import Homepage from './page/home.page';
 import Setup from './utils/setup';
 import { Customer, getAccount, releaseAccount } from './utils/customer';
@@ -48,7 +48,7 @@ export const test = base.extend<CustomFixtures, CustomWorkerFixtures>({
     },
 
     homepage: async ({ page }, use) => {
-        const homepage: Homepage = new Homepage(page);
+        const homepage: Homepage = getHomePage(page);
         await homepage.goTo();
         await use(homepage);
     },

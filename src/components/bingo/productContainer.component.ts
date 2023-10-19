@@ -1,8 +1,23 @@
-import { Locator } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
+import { Customer } from '../../utils/customer';
 import ProductContainer from '../productContainer.component';
+import PromotionModal from './promotionModal.component';
 
 export default class BingoContainer extends ProductContainer {
+    readonly promoModal: PromotionModal;
+
+    constructor(page: Page) {
+        super(page);
+
+        this.promoModal = new PromotionModal(page);
+    }
+
+    public async login(account: Customer) {
+        await super.login(account);
+        this.promoModal.dismissIfDisplayed().catch((err) => console.error(err));
+    }
+
     /********************************************
      * Locators                                 *
      ********************************************/

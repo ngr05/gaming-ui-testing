@@ -162,8 +162,13 @@ test('this is a test @silver @vegas @stage', async ({ homepage }) => {
 
 ## Things To Do...
 
--   Implement promo tests
+-   Implement compliance tests
     -   Bingo
+    -   Casino
+    -   Vegas
+-   Refactor promo test implementation
+    -   Is there more that can be shared by all products?
+    -   Need to distribute the promo selectors by product
 -   Demonstrate CI capabilities of the tests
     -   On failure, post to Slack
 -   Report into Testrail

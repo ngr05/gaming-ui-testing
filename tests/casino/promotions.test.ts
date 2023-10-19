@@ -9,7 +9,6 @@ import { expect, test } from '../../src/playwright';
 test.describe('Sky Casino promotion tests', () => {
     test.beforeEach(async ({ promoPage }) => {
         if (process.env.BRANCH && process.env.PRODUCT === 'casino') {
-            console.log('SOMETHING');
             await promoPage.addCookie(getCookieObject('skycasino-aws-01', process.env.BRANCH));
         }
     });
