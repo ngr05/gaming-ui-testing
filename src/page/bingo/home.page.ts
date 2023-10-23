@@ -25,11 +25,19 @@ export default class BingoHomepage extends Homepage {
      * Locators                                                     *
      * The locators here are either the most constent or from Vegas *
      ****************************************************************/
+    get joinBtn(): Locator {
+        return this.page.locator('a[data-qa="account-join-now"]');
+    }
+
     get playBingoBtn(): Locator {
         return this.page.locator('[data-qa="room-bingo-lobby"]');
     }
 
     get promotionsBtn(): Locator {
         return this.page.locator('a[data-qa="nav-main-promotions"]');
+    }
+
+    get saferGamblingBtn(): Locator {
+        throw new Error('no safer gambling button');
     }
 }

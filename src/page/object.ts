@@ -30,6 +30,7 @@ export default abstract class PageObject {
     public async goTo(path: string): Promise<void> {
         await this.page.goto(join(url, path));
         this.cookieBanner.dismissIfVisible().catch((err) => console.error(err));
+        // await this.cookieBanner.dismissIfVisible();
         // try {
         //     if (!this.cookiesDismissed) {
         //         await this.cookieBanner.banner.waitFor({ timeout: 3000 });

@@ -4,6 +4,8 @@ import ComponentObject from './object';
 import { Customer } from '../utils/customer';
 
 export default class Sidebar extends ComponentObject {
+    protected timeout = 5;
+
     constructor(page: Page) {
         super(page);
     }
@@ -13,7 +15,7 @@ export default class Sidebar extends ComponentObject {
     }
 
     public async waitToBeOpen(): Promise<void> {
-        await this.myAccountIndicator.isVisible();
+        await this.myAccountIndicator.isVisible({ timeout: this.timeout * 1000 });
     }
 
     public async performLogin(account: Customer): Promise<void> {
@@ -59,5 +61,26 @@ export default class Sidebar extends ComponentObject {
 
     get frame(): FrameLocator {
         return this.page.frameLocator('#SkyBetAccount');
+    }
+
+    // safer gambling
+    get depositLimitBtn(): Locator {
+        return this.frame.locator('a[data-qa="depositLimitLink"]');
+    }
+
+    get coolOffBtn(): Locator {
+        return this.frame.locator('a[data-qa="coolOffLink"]');
+    }
+
+    get selfExclusionBtn(): Locator {
+        return this.frame.locator('a[data-qa="selfExclusionLink"]');
+    }
+
+    get realityCheckBtn(): Locator {
+        return this.frame.locator('a[data-qa="realityCheckLink"]');
+    }
+
+    get closeMyAccountBtn(): Locator {
+        return this.frame.locator('a[data-qa="closeMyAccountLink"]');
     }
 }

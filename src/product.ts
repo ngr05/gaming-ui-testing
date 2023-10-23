@@ -1,3 +1,5 @@
+import { test } from './playwright';
+
 export let product: string;
 export let title: string;
 
@@ -30,3 +32,7 @@ if (!ENVIRONMENT || !validEnvs.includes(ENVIRONMENT)) {
 }
 
 export const url = `https://www.${ENVIRONMENT !== 'live' ? `${ENVIRONMENT}.` : ''}${product}.com/`;
+
+export const skipOnBingo = (reason: string) => {
+    test.skip(process.env.PRODUCT === 'bingo', reason);
+};

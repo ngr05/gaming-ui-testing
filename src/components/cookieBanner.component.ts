@@ -19,8 +19,8 @@ export default class CookieBanner extends ComponentObject {
 
     public async dismissIfVisible(): Promise<void> {
         try {
-            if (!this.cookiesDismissed) {
-                await this.banner.waitFor({ timeout: 3000 });
+            if (!this.cookiesDismissed || (await this.banner.isVisible())) {
+                await this.banner.waitFor({ timeout: 10000 });
                 await this.acceptCookies();
                 this.cookiesDismissed = true;
             }

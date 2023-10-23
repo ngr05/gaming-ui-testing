@@ -19,5 +19,7 @@ export default abstract class Homepage extends PageObject {
      * Locators                                                     *
      * The locators here are either the most constent or from Vegas *
      ****************************************************************/
+    abstract get joinBtn(): Locator;
     abstract get promotionsBtn(): Locator;
+    abstract get saferGamblingBtn(): Locator;
 }
