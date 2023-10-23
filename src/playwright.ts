@@ -25,7 +25,6 @@ export const test = base.extend<CustomFixtures, CustomWorkerFixtures>({
     account: [
         async ({}, use, info) => {
             const account = await getAccount();
-            console.debug(JSON.stringify(account));
             console.debug(
                 `[worker: ${info.workerIndex}] [browser: ${info.project.name}] user ${account.username} sourced, testing...`,
             );

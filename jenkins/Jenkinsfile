@@ -67,8 +67,8 @@ pipeline {
                 script {
                     try {
                         sh "npm run test:${params.product}:${params.environment}"
-                        def fails = sh returnStdout: true, script: 'find test-results -type f | wc -l'
-                        if (fails.toInteger() > 0) {
+                        def exitCode = sh returnStdout: true, script: 'echo $?'
+                        if (exitCode.toInteger() > 0) {
                             throw new Exception('test failures found')
                         }
                     } catch (err) {

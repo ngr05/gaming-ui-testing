@@ -13,7 +13,6 @@ export default class CasinoContainer extends ProductContainer {
     }
 
     public async login(account: Customer) {
-        console.log('CASINO LOGIN!');
         await super.login(account);
         await this.depositPrompt.dismissIfDisplayed();
     }
