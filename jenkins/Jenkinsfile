@@ -37,6 +37,7 @@ pipeline {
 
     parameters {
         string(name: 'branch', defaultValue: 'main', description: 'The branch to use for testing')
+        booleanParam(name: 'notify', defaultValue: true, description: 'Whether to notify slack on a test failure')
         choice(name: 'product', choices: ['bingo', 'casino', 'vegas', ''], description: 'The product to be tested')
         choice(name: 'environment', choices: ['live', 'staging', 'next', 'test', 'prod', 'preprod'], description: 'The environment to test')
     }
@@ -86,15 +87,17 @@ pipeline {
             sh 'rm -rf ./* ./.[a-zA-Z0-9]*'
         }
 
-        // failure {
-        //     script {
-        //         slack.send([
-        //             channel: '#gaming-ui-testing',
-        //             username: 'Jenkins Runner',
-        //             icon_emoji: ':failed:',
-        //             text: "❌ Gaming UI Testing has failed! (Environment: ${params.environment}, Product: ${params.product})"
-        //         ])
-        //     }
-        // }
+        failure {
+            script {
+                if (params.notify) {
+                    slack.send([
+                        channel: '#gaming-ui-testing',
+                        username: 'Jenkins Runner',
+                        icon_emoji: ':failed:',
+                        text: "❌ Gaming UI Testing has failed! (Environment: ${params.environment}, Product: ${params.product})"
+                    ])
+                }
+            }
+        }
     }
 }

@@ -121,8 +121,16 @@ opened by running `npx playwright show-report`.
 
 ### Testrail
 
-Ultimately, we would like to report the running of tests within Testrail. At the time of writing this, it has not been
-implemented but is certainly a must have.
+Test results are documented withing TestRail. The implementation of this has been developed from the initial starting
+point that can be found in [this video](https://www.youtube.com/watch?v=sEF9DOcFRY0). TestRail support documentation can
+also be found [here](https://support.testrail.com/hc/en-us/articles/9682231778324-Integrating-with-Playwright).
+
+trcli --host https://skybettingandgaming.testrail.com/ \
+ --project "Gaming UI" \
+ --username nicholas.green@flutteruki.com --key 5WCM/UGViID/F/Qw.vGu-XqQ16GWBVsTJk3PD51Ci \
+ parse_junit \
+ --title "Playwright Automated Test Run" \
+ --file "./test-results/junit-report.xml"
 
 ## Development
 
@@ -162,13 +170,12 @@ test('this is a test @silver @vegas @stage', async ({ homepage }) => {
 
 ## Things To Do...
 
--   Report into Testrail
-    -   Could we extend the `test` function to take in Testrail test IDs?
 -   Implement compliance tests
     -   Bingo
 -   Refactor promo test implementation
     -   Is there more that can be shared by all products?
     -   Need to distribute the promo selectors by product
+-   Attach failure videos to test cases in test runs
 -   Demonstrate CI capabilities of the tests
     -   On failure, post to Slack
 -   Create a custom runner with commander?
