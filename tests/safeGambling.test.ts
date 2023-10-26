@@ -11,7 +11,7 @@ test.describe('Safer Gambling testing', () => {
     test('clicking the safer gambling shield when logged out opens the account bar @test @staging @live @desktop @mobile @tablet', async ({
         homepage,
     }, testInfo) => {
-        testInfo.annotations.push({ type: 'testrail_case_field', description: 'GUI-1' });
+        // testInfo.annotations.push({ type: 'testrail_case_field', description: 'GUI-1' });
 
         skipOnBingo('safer gambling works a bit different here');
 
@@ -34,7 +34,7 @@ test.describe('Safer Gambling testing', () => {
         container,
         homepage,
     }, testInfo) => {
-        testInfo.annotations.push({ type: 'testrail_case_field', description: 'GUI-1' });
+        // testInfo.annotations.push({ type: 'testrail_case_field', description: 'GUI-1' });
 
         skipOnBingo('safer gambling works a bit different here');
 
@@ -64,16 +64,26 @@ test.describe('Safer Gambling testing', () => {
         account,
         container,
         homepage,
-    }) => {
+    }, testInfo) => {
+        testInfo.annotations.push({ type: 'testrail_result_comment', description: '1. login to the portal' });
         await container.login(account);
 
+        testInfo.annotations.push({ type: 'testrail_result_comment', description: '2. open the accout sidebar' });
         await container.myAccountBtn.waitFor();
         await container.myAccountBtn.click();
         await container.sidebar.myAccountIndicator.waitFor();
 
+        testInfo.annotations.push({
+            type: 'testrail_result_comment',
+            description: '3. select the safer gambling options are displayed',
+        });
         await container.sidebar.saferGamblingToolsBtn.waitFor();
         await container.sidebar.saferGamblingToolsBtn.click();
 
+        testInfo.annotations.push({
+            type: 'testrail_result_comment',
+            description: '4. observe the safer gambling tools that are available',
+        });
         await expect(homepage.sidebar.depositLimitBtn).toBeVisible();
         await expect(homepage.sidebar.coolOffBtn).toBeVisible();
         await expect(homepage.sidebar.selfExclusionBtn).toBeVisible();

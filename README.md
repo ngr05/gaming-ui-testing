@@ -170,8 +170,6 @@ test('this is a test @silver @vegas @stage', async ({ homepage }) => {
 
 ## Things To Do...
 
--   Implement compliance tests
-    -   Bingo
 -   Refactor promo test implementation
     -   Is there more that can be shared by all products?
     -   Need to distribute the promo selectors by product
