@@ -64,6 +64,10 @@ export default class Sidebar extends ComponentObject {
     }
 
     // safer gambling
+    get saferGamblingToolsBtn(): Locator {
+        return this.frame.locator('a[title="Responsible Gambling"]');
+    }
+
     get depositLimitBtn(): Locator {
         return this.frame.locator('a[data-qa="depositLimitLink"]');
     }
