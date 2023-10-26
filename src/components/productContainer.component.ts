@@ -18,6 +18,9 @@ export default abstract class ProductContainer extends PageObject {
     }
 
     public async openSidebar(): Promise<void> {
+        // when the page renders, on casino specifically, the shell of the site does not display a login or account
+        // button so we need to wait for one or the other to appear before we can continue.
+        await Promise.any([this.loginBtn.waitFor(), this.myAccountBtn.waitFor()]);
         if (await this.loginBtn.isVisible()) {
             await this.loginBtn.click();
         } else {

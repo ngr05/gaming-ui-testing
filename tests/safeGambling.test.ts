@@ -8,7 +8,7 @@ test.describe('Safer Gambling testing', () => {
         await setup.setDefaultCookies();
     });
 
-    test('Test clicking the safer gambling shield when logged out opens the account bar @test @staging @live @desktop @mobile @tablet', async ({
+    test('clicking the safer gambling shield when logged out opens the account bar @test @staging @live @desktop @mobile @tablet', async ({
         homepage,
     }, testInfo) => {
         testInfo.annotations.push({ type: 'testrail_case_field', description: 'GUI-1' });
@@ -29,7 +29,7 @@ test.describe('Safer Gambling testing', () => {
         throw new Error('something');
     });
 
-    test('Test clicking the safer gambling shield when logged in opens deposit limit @test @staging @live @desktop @mobile @tablet', async ({
+    test('clicking the safer gambling shield when logged in opens deposit limit @test @staging @live @desktop @mobile @tablet', async ({
         account,
         container,
         homepage,
@@ -53,6 +53,27 @@ test.describe('Safer Gambling testing', () => {
             type: 'testrail_result_comment',
             description: '3. check that the sidebar is open on the safer gambling options',
         });
+        await expect(homepage.sidebar.depositLimitBtn).toBeVisible();
+        await expect(homepage.sidebar.coolOffBtn).toBeVisible();
+        await expect(homepage.sidebar.selfExclusionBtn).toBeVisible();
+        await expect(homepage.sidebar.realityCheckBtn).toBeVisible();
+        await expect(homepage.sidebar.closeMyAccountBtn).toBeVisible();
+    });
+
+    test('navigating through the sidebar to the safer gambling tools @test @staging @live @desktop @mobile @tablet', async ({
+        account,
+        container,
+        homepage,
+    }) => {
+        await container.login(account);
+
+        await container.myAccountBtn.waitFor();
+        await container.myAccountBtn.click();
+        await container.sidebar.myAccountIndicator.waitFor();
+
+        await container.sidebar.saferGamblingToolsBtn.waitFor();
+        await container.sidebar.saferGamblingToolsBtn.click();
+
         await expect(homepage.sidebar.depositLimitBtn).toBeVisible();
         await expect(homepage.sidebar.coolOffBtn).toBeVisible();
         await expect(homepage.sidebar.selfExclusionBtn).toBeVisible();

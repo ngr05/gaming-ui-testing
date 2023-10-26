@@ -2,6 +2,8 @@
 
 // This is very much work in progress and just a theory
 
+// GPUT : Gaming Playwright UI Tests
+
 import { Command } from 'commander';
 import { exec } from 'child_process';
 

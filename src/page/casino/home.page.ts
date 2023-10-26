@@ -18,7 +18,7 @@ export default class CasinoHomepage extends Homepage {
     }
 
     get promotionsBtn(): Locator {
-        return this.page.locator('#cs-account [data-qa="Promotions"]');
+        return this.page.getByRole('navigation').getByRole('link', { name: 'Promotions' });
     }
 
     get saferGamblingBtn(): Locator {
