@@ -30,6 +30,7 @@
         "test:vegas:staging": "ENVIRONMENT=staging PRODUCT=vegas npm test",
         "test:vegas:live": "ENVIRONMENT=live PRODUCT=vegas npm test",
         "test:vegas:preprod": "concurrently \"npm run test:vegas:test\" \"npm run test:vegas:staging\"",
+        "testrail:report": "./testrail-report.sh",
         "prepare": "husky install && playwright install"
     },
     "keywords": [],

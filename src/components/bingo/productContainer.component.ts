@@ -6,6 +6,7 @@ import PromotionModal from './promotionModal.component';
 
 export default class BingoContainer extends ProductContainer {
     readonly promoModal: PromotionModal;
+    readonly initalBreadcrumb = 'Online Bingo';
 
     constructor(page: Page) {
         super(page);
@@ -23,6 +24,10 @@ export default class BingoContainer extends ProductContainer {
      ********************************************/
     get balanceDisplay(): Locator {
         return this.page.locator('span[data-qa="account-balance"]');
+    }
+
+    get breadcrumbs(): Locator {
+        return this.page.locator('nav.breadcrumb ul');
     }
 
     get loginBtn(): Locator {

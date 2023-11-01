@@ -3,22 +3,28 @@ import { test } from './playwright';
 export let product: string;
 export let title: string;
 
+export enum Product {
+    BINGO = 'bingo',
+    CASINO = 'casino',
+    VEGAS = 'vegas',
+}
+
 const { ENVIRONMENT, PRODUCT } = process.env;
 let validEnvs = ['test2', 'staging', 'live'];
 
 switch (PRODUCT) {
-    case 'bingo':
+    case Product.BINGO:
         product = 'skybingo';
         title = 'Sky Bingo';
         break;
 
-    case 'casino':
+    case Product.CASINO:
         product = 'skycasino';
         title = 'Sky Casino';
         validEnvs = ['next', 'live'];
         break;
 
-    case 'vegas':
+    case Product.VEGAS:
         product = 'skyvegas';
         title = 'Sky Vegas';
         break;
@@ -33,6 +39,6 @@ if (!ENVIRONMENT || !validEnvs.includes(ENVIRONMENT)) {
 
 export const url = `https://www.${ENVIRONMENT !== 'live' ? `${ENVIRONMENT}.` : ''}${product}.com/`;
 
-export const skipOnBingo = (reason: string) => {
-    test.skip(process.env.PRODUCT === 'bingo', reason);
+export const skipOn = (product: Product, reason: string) => {
+    test.skip(process.env.PRODUCT === product, reason);
 };

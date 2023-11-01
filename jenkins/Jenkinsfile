@@ -5,14 +5,14 @@
 // | | | | .-------- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue ...
 // | | | | |
 // * * * * * command to be executed
-CRON_SETTINGS = '''0 7-16 * * * % product=bingo;environment=test
-5 7-16 * * * % product=bingo;environment=staging
-10 7-16 * * * % product=bingo;environment=live
-15 7-16 * * * % product=casino;environment=next
-20 7-16 * * * % product=casino;environment=live
-25 7-16 * * * % product=vegas;environment=test
-30 7-16 * * * % product=vegas;environment=staging
-35 7-16 * * * % product=vegas;environment=live'''
+CRON_SETTINGS = '''0 7-16 * * 1-6 % product=bingo;environment=test
+5 7-16 * * 1-6 % product=bingo;environment=staging
+10 7-16 * * 1-6 % product=bingo;environment=live
+15 7-16 * * 1-6 % product=casino;environment=next
+20 7-16 * * 1-6 % product=casino;environment=live
+25 7-16 * * 1-6 % product=vegas;environment=test
+30 7-16 * * 1-6 % product=vegas;environment=staging
+35 7-16 * * 1-6 % product=vegas;environment=live'''
 
 pipeline {
     agent {
@@ -59,7 +59,7 @@ pipeline {
                         url: 'https://github.com/ngr05/gaming-ui-testing.git'
                         branch: params.branch
                 }
-                sh 'npm install'
+                sh('npm install')
             }
         }
 
@@ -67,7 +67,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "npm run test:${params.product}:${params.environment}"
+                        sh("npm run test:${params.product}:${params.environment}")
                         def exitCode = sh returnStdout: true, script: 'echo $?'
                         if (exitCode.toInteger() > 0) {
                             throw new Exception('test failures found')
@@ -83,8 +83,9 @@ pipeline {
 
     post {
         always {
+            sh('./scripts/testrail-report.sh')
             archiveArtifacts allowEmptyArchive: true, artifacts: 'test-results/**/*.*, playwright-report/**/*.*', followSymlinks: false
-            sh 'rm -rf ./* ./.[a-zA-Z0-9]*'
+            sh('rm -rf ./* ./.[a-zA-Z0-9]*')
         }
 
         failure {

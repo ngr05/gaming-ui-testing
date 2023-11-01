@@ -4,6 +4,7 @@ import { expect, test } from '../src/playwright';
 
 test.describe('Authentication tests', () => {
     test('login', async ({ account, container, homepage }, testInfo) => {
+        testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });
         testInfo.annotations.push({ type: 'testrail_result_comment', description: '1. go to the portal' });
         await homepage.goTo();
         testInfo.annotations.push({ type: 'testrail_result_comment', description: '2. log in' });
@@ -18,6 +19,7 @@ test.describe('Authentication tests', () => {
     });
 
     test('logout', async ({ account, container, homepage }, testInfo) => {
+        testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });
         // Login
         testInfo.annotations.push({ type: 'testrail_result_comment', description: '1. go to the portal' });
         await homepage.goTo();

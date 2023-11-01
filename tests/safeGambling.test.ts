@@ -1,7 +1,7 @@
 // @ts-check
 
 import { expect, test } from '../src/playwright';
-import { skipOnBingo } from '../src/product';
+import { Product, skipOn } from '../src/product';
 
 test.describe('Safer Gambling testing', () => {
     test.beforeEach(async ({ setup }) => {
@@ -11,9 +11,9 @@ test.describe('Safer Gambling testing', () => {
     test('clicking the safer gambling shield when logged out opens the account bar @test @staging @live @desktop @mobile @tablet', async ({
         homepage,
     }, testInfo) => {
-        // testInfo.annotations.push({ type: 'testrail_case_field', description: 'GUI-1' });
+        testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });
 
-        skipOnBingo('safer gambling works a bit different here');
+        skipOn(Product.BINGO, 'safer gambling works a bit different here');
 
         testInfo.annotations.push({
             type: 'testrail_result_comment',
@@ -26,7 +26,6 @@ test.describe('Safer Gambling testing', () => {
             description: '2. check that the sidebar is open',
         });
         await expect(homepage.sidebar.myAccountIndicator).toBeVisible();
-        throw new Error('something');
     });
 
     test('clicking the safer gambling shield when logged in opens deposit limit @test @staging @live @desktop @mobile @tablet', async ({
@@ -34,9 +33,9 @@ test.describe('Safer Gambling testing', () => {
         container,
         homepage,
     }, testInfo) => {
-        // testInfo.annotations.push({ type: 'testrail_case_field', description: 'GUI-1' });
+        testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });
 
-        skipOnBingo('safer gambling works a bit different here');
+        skipOn(Product.BINGO, 'safer gambling works a bit different here');
 
         testInfo.annotations.push({ type: 'testrail_result_comment', description: '1. login to the portal' });
         await container.login(account);

@@ -6,6 +6,7 @@ import DepositPrompt from './depositPrompt.component';
 
 export default class CasinoContainer extends ProductContainer {
     readonly depositPrompt: DepositPrompt;
+    readonly initalBreadcrumb = 'Online Casino';
 
     constructor(page: Page) {
         super(page);

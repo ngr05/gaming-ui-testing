@@ -173,6 +173,9 @@ test('this is a test @silver @vegas @stage', async ({ homepage }) => {
 -   Refactor promo test implementation
     -   Is there more that can be shared by all products?
     -   Need to distribute the promo selectors by product
+-   Game launching tests
+-   Get videos stored and running in Jenkins artifacts
+    -   Get the videos stored in TestRail
 -   Attach failure videos to test cases in test runs
 -   Demonstrate CI capabilities of the tests
     -   On failure, post to Slack
@@ -182,7 +185,7 @@ test('this is a test @silver @vegas @stage', async ({ homepage }) => {
 
 In order to work on a Jenkins Pipeline to run the tests, I have used a dockerised version in order to test. I used
 [these docs](https://www.jenkins.io/doc/book/installing/docker/) to run the instance. To start this instance, just run
-`./jenkins/start-dev.sh`.
+`./scripts/start-dev.sh`.
 
 This will start an instance of Jenkins at http://localhost:8080. The admin password will be output at the end of the dev
 script.
