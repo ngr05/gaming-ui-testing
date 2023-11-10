@@ -21,5 +21,6 @@ module.exports = {
     },
     rules: {
         // '@typescript-eslint/no-floating-promises': 'error',
+        'no-control-regex': 0,
     },
 };

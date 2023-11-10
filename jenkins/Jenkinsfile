@@ -5,14 +5,14 @@
 // | | | | .-------- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue ...
 // | | | | |
 // * * * * * command to be executed
-CRON_SETTINGS = '''0 7-16 * * * % product=bingo;environment=test
-5 7-16 * * * % product=bingo;environment=staging
-10 7-16 * * * % product=bingo;environment=live
-15 7-16 * * * % product=casino;environment=next
-20 7-16 * * * % product=casino;environment=live
-25 7-16 * * * % product=vegas;environment=test
-30 7-16 * * * % product=vegas;environment=staging
-35 7-16 * * * % product=vegas;environment=live'''
+CRON_SETTINGS = '''0 7-16 * * 1-6 % product=bingo;environment=test
+5 7-16 * * 1-6 % product=bingo;environment=staging
+10 7-16 * * 1-6 % product=bingo;environment=live
+15 7-16 * * 1-6 % product=casino;environment=next
+20 7-16 * * 1-6 % product=casino;environment=live
+25 7-16 * * 1-6 % product=vegas;environment=test
+30 7-16 * * 1-6 % product=vegas;environment=staging
+35 7-16 * * 1-6 % product=vegas;environment=live'''
 
 pipeline {
     agent {
@@ -37,6 +37,7 @@ pipeline {
 
     parameters {
         string(name: 'branch', defaultValue: 'main', description: 'The branch to use for testing')
+        booleanParam(name: 'notify', defaultValue: true, description: 'Whether to notify slack on a test failure')
         choice(name: 'product', choices: ['bingo', 'casino', 'vegas', ''], description: 'The product to be tested')
         choice(name: 'environment', choices: ['live', 'staging', 'next', 'test', 'prod', 'preprod'], description: 'The environment to test')
     }
@@ -58,7 +59,7 @@ pipeline {
                         url: 'https://github.com/ngr05/gaming-ui-testing.git'
                         branch: params.branch
                 }
-                sh 'npm install'
+                sh('npm install')
             }
         }
 
@@ -66,7 +67,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "npm run test:${params.product}:${params.environment}"
+                        sh("npm run test:${params.product}:${params.environment}")
                         def exitCode = sh returnStdout: true, script: 'echo $?'
                         if (exitCode.toInteger() > 0) {
                             throw new Exception('test failures found')
@@ -82,19 +83,22 @@ pipeline {
 
     post {
         always {
+            sh('./scripts/testrail-report.sh')
             archiveArtifacts allowEmptyArchive: true, artifacts: 'test-results/**/*.*, playwright-report/**/*.*', followSymlinks: false
-            sh 'rm -rf ./* ./.[a-zA-Z0-9]*'
+            sh('rm -rf ./* ./.[a-zA-Z0-9]*')
         }
 
-        // failure {
-        //     script {
-        //         slack.send([
-        //             channel: '#gaming-ui-testing',
-        //             username: 'Jenkins Runner',
-        //             icon_emoji: ':failed:',
-        //             text: "❌ Gaming UI Testing has failed! (Environment: ${params.environment}, Product: ${params.product})"
-        //         ])
-        //     }
-        // }
+        failure {
+            script {
+                if (params.notify) {
+                    slack.send([
+                        channel: '#gaming-ui-testing',
+                        username: 'Jenkins Runner',
+                        icon_emoji: ':failed:',
+                        text: "❌ Gaming UI Testing has failed! (Environment: ${params.environment}, Product: ${params.product})"
+                    ])
+                }
+            }
+        }
     }
 }

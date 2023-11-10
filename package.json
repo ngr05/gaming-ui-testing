@@ -30,16 +30,18 @@
         "test:vegas:staging": "ENVIRONMENT=staging PRODUCT=vegas npm test",
         "test:vegas:live": "ENVIRONMENT=live PRODUCT=vegas npm test",
         "test:vegas:preprod": "concurrently \"npm run test:vegas:test\" \"npm run test:vegas:staging\"",
-        "prepare": "husky install"
+        "testrail:report": "./testrail-report.sh",
+        "prepare": "husky install && playwright install"
     },
     "keywords": [],
     "author": "Nick Green <nicholas.green@flutteruki.com>",
     "license": "ISC",
     "devDependencies": {
-        "@playwright/test": "^1.37.1",
+        "@playwright/test": "^1.39.0",
         "@types/node": "^20.6.5",
         "@typescript-eslint/eslint-plugin": "^6.7.4",
         "@typescript-eslint/parser": "^6.7.4",
+        "allure-playwright": "^2.9.2",
         "concurrently": "^8.2.1",
         "eslint": "^8.50.0",
         "eslint-config-prettier": "^9.0.0",
@@ -65,12 +67,13 @@
     },
     "dependencies": {
         "commander": "^11.0.0",
+        "playwright": "^1.39.0",
         "playwright-chromium": "^1.11.1",
         "playwright-firefox": "^1.11.1",
         "playwright-webkit": "^1.11.1"
     },
     "bin": {
-        "test-gput": "gput.ts"
+        "gam-gpt": "gput.ts"
     },
     "main": "gput.ts"
 }

@@ -30,7 +30,9 @@ export default defineConfig({
         ['list', { printSteps: true }],
         ['html', { open: 'never' }],
         ['json', { outputFile: 'playwright-report/results.json' }],
-        ['junit', { outputFile: 'playwright-report/results.xml' }],
+        ['./src/reporter.ts', { outputFile: './test-results/testrail.{suite}.xml' }],
+        ['junit', { embedAnnotationsAsProperties: true, outputFile: './test-results/junit-report.xml' }],
+        ['allure-playwright'],
     ],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {

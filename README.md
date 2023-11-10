@@ -121,8 +121,16 @@ opened by running `npx playwright show-report`.
 
 ### Testrail
 
-Ultimately, we would like to report the running of tests within Testrail. At the time of writing this, it has not been
-implemented but is certainly a must have.
+Test results are documented withing TestRail. The implementation of this has been developed from the initial starting
+point that can be found in [this video](https://www.youtube.com/watch?v=sEF9DOcFRY0). TestRail support documentation can
+also be found [here](https://support.testrail.com/hc/en-us/articles/9682231778324-Integrating-with-Playwright).
+
+Due to us running the same tests on multiple browsers, we have to do some extra bits of work. Because if we were to look
+at the junit report, we would find the same test cases multiple times the TestRail CLI would error. A command line tool
+has been created in order to handle the logic. The first step that needs to take place is the creation of a test plan.
+The custom reporter will have created junit files for each of the browsers. Each of those files should then be parsed by
+with the TestRail CLI and uploaded to the test plan with the configuration that has been set up already for the browser.
+Once that is done, the test plan should be closed.
 
 ## Development
 
@@ -162,22 +170,18 @@ test('this is a test @silver @vegas @stage', async ({ homepage }) => {
 
 ## Things To Do...
 
--   Report into Testrail
-    -   Could we extend the `test` function to take in Testrail test IDs?
--   Implement compliance tests
-    -   Bingo
--   Refactor promo test implementation
-    -   Is there more that can be shared by all products?
-    -   Need to distribute the promo selectors by product
+-   Game launching tests
+-   Get videos stored and running in Jenkins artifacts
 -   Demonstrate CI capabilities of the tests
     -   On failure, post to Slack
 -   Create a custom runner with commander?
+    -   Document
 
 ## Jenkins
 
 In order to work on a Jenkins Pipeline to run the tests, I have used a dockerised version in order to test. I used
 [these docs](https://www.jenkins.io/doc/book/installing/docker/) to run the instance. To start this instance, just run
-`./jenkins/start-dev.sh`.
+`./scripts/start-dev.sh`.
 
 This will start an instance of Jenkins at http://localhost:8080. The admin password will be output at the end of the dev
 script.

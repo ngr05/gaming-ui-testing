@@ -1,7 +1,7 @@
 // @ts-check
 
 import { expect, test } from '../src/playwright';
-import { skipOnBingo } from '../src/product';
+import { Product, skipOn } from '../src/product';
 
 test.describe('Safer Gambling testing', () => {
     test.beforeEach(async ({ setup }) => {
@@ -10,11 +10,21 @@ test.describe('Safer Gambling testing', () => {
 
     test('clicking the safer gambling shield when logged out opens the account bar @test @staging @live @desktop @mobile @tablet', async ({
         homepage,
-    }) => {
-        skipOnBingo('safer gambling works a bit different here');
+    }, testInfo) => {
+        testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });
 
+        skipOn(Product.BINGO, 'safer gambling works a bit different here');
+
+        testInfo.annotations.push({
+            type: 'testrail_result_comment',
+            description: '1. click the safer gambling button once visible',
+        });
         await homepage.saferGamblingBtn.waitFor();
         await homepage.saferGamblingBtn.click();
+        testInfo.annotations.push({
+            type: 'testrail_result_comment',
+            description: '2. check that the sidebar is open',
+        });
         await expect(homepage.sidebar.myAccountIndicator).toBeVisible();
     });
 
@@ -22,15 +32,26 @@ test.describe('Safer Gambling testing', () => {
         account,
         container,
         homepage,
-    }) => {
-        skipOnBingo('safer gambling works a bit different here');
+    }, testInfo) => {
+        testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });
 
+        skipOn(Product.BINGO, 'safer gambling works a bit different here');
+
+        testInfo.annotations.push({ type: 'testrail_result_comment', description: '1. login to the portal' });
         await container.login(account);
 
+        testInfo.annotations.push({
+            type: 'testrail_result_comment',
+            description: '2. click the safer gambling button once visible',
+        });
         await homepage.saferGamblingBtn.waitFor();
         await homepage.saferGamblingBtn.click();
         await expect(homepage.sidebar.myAccountIndicator).toBeVisible();
 
+        testInfo.annotations.push({
+            type: 'testrail_result_comment',
+            description: '3. check that the sidebar is open on the safer gambling options',
+        });
         await expect(homepage.sidebar.depositLimitBtn).toBeVisible();
         await expect(homepage.sidebar.coolOffBtn).toBeVisible();
         await expect(homepage.sidebar.selfExclusionBtn).toBeVisible();
@@ -42,16 +63,26 @@ test.describe('Safer Gambling testing', () => {
         account,
         container,
         homepage,
-    }) => {
+    }, testInfo) => {
+        testInfo.annotations.push({ type: 'testrail_result_comment', description: '1. login to the portal' });
         await container.login(account);
 
+        testInfo.annotations.push({ type: 'testrail_result_comment', description: '2. open the accout sidebar' });
         await container.myAccountBtn.waitFor();
         await container.myAccountBtn.click();
         await container.sidebar.myAccountIndicator.waitFor();
 
+        testInfo.annotations.push({
+            type: 'testrail_result_comment',
+            description: '3. select the safer gambling options are displayed',
+        });
         await container.sidebar.saferGamblingToolsBtn.waitFor();
         await container.sidebar.saferGamblingToolsBtn.click();
 
+        testInfo.annotations.push({
+            type: 'testrail_result_comment',
+            description: '4. observe the safer gambling tools that are available',
+        });
         await expect(homepage.sidebar.depositLimitBtn).toBeVisible();
         await expect(homepage.sidebar.coolOffBtn).toBeVisible();
         await expect(homepage.sidebar.selfExclusionBtn).toBeVisible();

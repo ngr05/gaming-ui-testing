@@ -7,6 +7,7 @@ import { Customer, getAccount, releaseAccount } from './utils/customer';
 import Promotions from './page/promotions.page';
 import { newPromotionsListPage } from './config/cookies';
 import ProductContainer from './components/productContainer.component';
+import { cwd } from 'process';
 
 export { expect } from '@playwright/test';
 
@@ -60,4 +61,26 @@ export const test = base.extend<CustomFixtures, CustomWorkerFixtures>({
         await promoPage.addCookie(newPromotionsListPage);
         await use(promoPage);
     },
+});
+
+test.afterEach(({}, testInfo) => {
+    testInfo.attachments.forEach((attachment) => {
+        testInfo.annotations.push({
+            type: 'testrail_attachment',
+            description: attachment.path?.replace(`${cwd()}/`, ''),
+        });
+    });
+});
+
+test.afterAll(({}, testInfo) => {
+    testInfo.attachments.forEach((attachment) => {
+        const description = attachment.path?.replace(`${cwd()}/`, '');
+        if (testInfo.annotations.find((annotation) => annotation.description === description)) {
+            return;
+        }
+        testInfo.annotations.push({
+            type: 'testrail_attachment',
+            description,
+        });
+    });
 });

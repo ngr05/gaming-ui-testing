@@ -1,95 +1,38 @@
 import { Locator } from '@playwright/test';
 
-import { expect } from '../playwright';
 import PageObject from './object';
 
 export default abstract class Promotions extends PageObject {
-    readonly exclusivePromoHeading = 'Exclusively for you';
+    public promotionsBreadcrumb = 'Promotions';
 
     public async goTo(): Promise<void> {
         return await super.goTo('promotions');
     }
 
-    public async selectCardAndVerify(card: Locator): Promise<void> {
-        await card.waitFor();
-        const slug = await this.cardLinks.first().getAttribute('href');
-        const tag = await this.cardLinks.first().getAttribute('data-qa');
-        if (!tag) {
-            throw new Error('could not find a card!');
-        }
+    abstract getPromoDetailsSlug(tile: Locator): Promise<string>;
 
-        await this.selectPromoCard(tag);
-        expect(this.page.url()).toMatch(new RegExp(`.+${slug}?$`));
-    }
-
-    public async selectPromoCard(tag: string): Promise<void> {
-        const selector = `a[data-qa="${tag}"]`;
-        const card: Locator = this.page.locator(selector);
-        await card.waitFor();
-        await card.click();
-        await this.pdpLoadedIndicator.waitFor();
+    getPromotionDetailsBreadcrumb(): Promise<string> {
+        return new Promise((res) => res('Promotion Details'));
     }
 
     /****************************************************************
      * Locators                                                     *
-     * The locators here are either the most constent or from Vegas *
+     * All locators are distributed to the products                 *
      ****************************************************************/
-    // Bingo
-    get currentPromoList(): Locator {
-        return this.page.locator('ul.current-promos');
-    }
+    abstract get promoTile(): Locator;
+    abstract get promoTiles(): Locator;
 
-    get promoImage(): Locator {
-        return this.page.locator('a[data-track-category="Promotion Grid Image"]');
-    }
+    abstract get featuredPromoBanner(): Locator;
+    abstract get activePromosGrid(): Locator;
+    abstract get availablePromosGrid(): Locator;
 
-    // Casino
-    get activePromosGrid(): Locator {
-        return this.page.locator('div[data-qa="promotion-grid-active"]');
-    }
+    abstract get promoTimer(): Locator;
 
-    get availablePromosGrid(): Locator {
-        return this.page.locator('div[data-qa="promotion-grid-available"]');
-    }
+    abstract get promoDetailsPage(): Locator;
 
-    get featuredPromosGrid(): Locator {
-        return this.page.locator('div[data-qa="promotion-grid-featured"]');
-    }
+    abstract get exclusivePromoHeader(): Locator;
+    abstract get exclusivePromoLink(): Locator;
 
-    get promoDetailsPage(): Locator {
-        return this.page.locator('section[data-track="Promotion Detail"]');
-    }
-
-    get promoTile(): Locator {
-        return this.page.locator('div[data-qa="promotion-tile"]');
-    }
-
-    get promoTimer(): Locator {
-        return this.page.locator('div[data-qa="time-left"]');
-    }
-
-    // Vegas
-    get cardLinks(): Locator {
-        return this.page.locator('a[data-qa^="pr-card-link-"]');
-    }
-
-    get exclusivePromoHeader(): Locator {
-        return this.page.getByRole('heading', { name: this.exclusivePromoHeading });
-    }
-
-    get exclusivePromoLink(): Locator {
-        return this.page.locator('[data-qa="promotion-row-exclusive"]');
-    }
-
-    get latestPromosRow(): Locator {
-        return this.page.locator('[data-qa^="promotion-row-latest-promotions"]');
-    }
-
-    get latestPromoLinks(): Locator {
-        return this.page.locator('[data-qa^="promo-card-link-latest-promotions-"]');
-    }
-
-    get pdpLoadedIndicator(): Locator {
-        return this.page.locator('div[data-track^="PDP"]');
-    }
+    abstract get latestPromosContainer(): Locator;
+    abstract get latestPromoLinks(): Locator;
 }

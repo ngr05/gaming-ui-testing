@@ -51,6 +51,8 @@ export default abstract class ProductContainer extends PageObject {
         await this.myAccountBtn.waitFor({ state: 'hidden' });
     }
 
+    abstract get initalBreadcrumb(): string;
+
     /****************************************************************
      * Locators                                                     *
      * These need to be dfined on a product by product basis.       *
@@ -58,6 +60,8 @@ export default abstract class ProductContainer extends PageObject {
     get balanceDisplay(): Locator {
         return this.page.locator('span[data-qa="user-balance"]');
     }
+
+    abstract get breadcrumbs(): Locator;
 
     get loginBtn(): Locator {
         return this.page.locator('button[data-qa="login-button"]');
