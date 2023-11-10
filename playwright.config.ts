@@ -11,11 +11,6 @@ const products = ['bingo', 'casino', 'vegas'];
 products.splice(products.indexOf(process.env.PRODUCT || '', 0), 1);
 const testIgnore = new RegExp(`tests/${products.join('|tests/')}`);
 
-const testRailOptions = {
-    embedAnnotationsAsProperties: true,
-    outputFile: './test-results/junit-report.xml',
-};
-
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -35,7 +30,9 @@ export default defineConfig({
         ['list', { printSteps: true }],
         ['html', { open: 'never' }],
         ['json', { outputFile: 'playwright-report/results.json' }],
-        ['junit', testRailOptions],
+        ['./src/reporter.ts', { outputFile: './test-results/testrail.{suite}.xml' }],
+        ['junit', { embedAnnotationsAsProperties: true, outputFile: './test-results/junit-report.xml' }],
+        ['allure-playwright'],
     ],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {

@@ -64,10 +64,23 @@ export const test = base.extend<CustomFixtures, CustomWorkerFixtures>({
 });
 
 test.afterEach(({}, testInfo) => {
-    testInfo.attachments.forEach((attachment) =>
+    testInfo.attachments.forEach((attachment) => {
         testInfo.annotations.push({
             type: 'testrail_attachment',
             description: attachment.path?.replace(`${cwd()}/`, ''),
-        }),
-    );
+        });
+    });
+});
+
+test.afterAll(({}, testInfo) => {
+    testInfo.attachments.forEach((attachment) => {
+        const description = attachment.path?.replace(`${cwd()}/`, '');
+        if (testInfo.annotations.find((annotation) => annotation.description === description)) {
+            return;
+        }
+        testInfo.annotations.push({
+            type: 'testrail_attachment',
+            description,
+        });
+    });
 });
