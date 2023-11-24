@@ -54,10 +54,6 @@ pipeline {
                     addShortText(text: "branch: ${params.branch}")
                     addShortText(text: "product: ${params.product}")
                     addShortText(text: "environment: ${params.environment}")
-
-                    git branch: 'main',
-                        url: 'https://github.com/ngr05/gaming-ui-testing.git'
-                        branch: params.branch
                 }
                 sh('npm install')
             }
