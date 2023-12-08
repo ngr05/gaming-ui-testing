@@ -1,7 +1,7 @@
 // @ts-check
 
 import { expect, test } from '../src/playwright';
-import { title } from '../src/product';
+import { title } from '../src/utils/product';
 
 test('has title', async ({ homepage }, testInfo) => {
     testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });

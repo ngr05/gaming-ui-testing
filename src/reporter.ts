@@ -233,7 +233,7 @@ class CustomReporter implements Reporter {
                 errors: 0,
                 failures: counts.failures,
                 hostname: project,
-                name: suite.title,
+                name: this.cleanName(suite.title),
                 // name: `${project} - ${suite.title}`,
                 skipped: counts.skipped,
                 tests: counts.tests,
@@ -250,8 +250,8 @@ class CustomReporter implements Reporter {
 
         const tc: XMLObject = {
             attributes: {
-                name: test.titlePath().slice(3).join(' - '),
-                classname: title,
+                name: this.cleanName(test.titlePath().slice(3).join(' - ')),
+                classname: this.cleanName(title),
                 time: test.results.reduce((prev, current) => prev + current.duration, 0) / 1000,
             },
             children: [],
@@ -386,6 +386,15 @@ class CustomReporter implements Reporter {
         const discouragedXMLCharacters = /[\u0000-\u0008\u000b-\u000c\u000e-\u001f\u007f-\u0084\u0086-\u009f]/g;
         text = text.replace(discouragedXMLCharacters, '');
         return text;
+    }
+
+    private cleanName(name: string): string {
+        return name
+            .replace(/\.test\.ts$/, '')
+            .replaceAll(/([A-Z])/g, ' $1')
+            .toLowerCase()
+            .replaceAll(/\s+/g, ' ')
+            .trim();
     }
 }
 

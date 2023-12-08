@@ -1,6 +1,7 @@
 import { test as base } from '@playwright/test';
 
-import { getHomePage, getProductContainer, getPromotionsPage } from './utils/factory';
+import { getGameInfoPage, getHomePage, getProductContainer, getPromotionsPage } from './utils/factory';
+import GameInfo from './page/gameInfo.page';
 import Homepage from './page/home.page';
 import Setup from './utils/setup';
 import { Customer, getAccount, releaseAccount } from './utils/customer';
@@ -14,6 +15,7 @@ export { expect } from '@playwright/test';
 interface CustomFixtures {
     container: ProductContainer;
     setup: Setup;
+    gameInfo: GameInfo;
     homepage: Homepage;
     promoPage: Promotions;
 }
@@ -46,6 +48,12 @@ export const test = base.extend<CustomFixtures, CustomWorkerFixtures>({
     setup: async ({ page }, use) => {
         const setup = new Setup(page);
         await use(setup);
+    },
+
+    gameInfo: async ({ page }, use) => {
+        const gameInfo: GameInfo = getGameInfoPage(page);
+        await gameInfo.goTo();
+        await use(gameInfo);
     },
 
     homepage: async ({ page }, use) => {

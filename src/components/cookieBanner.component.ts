@@ -38,7 +38,23 @@ export default class CookieBanner extends ComponentObject {
 
     public async rejectCookies(): Promise<void> {
         await this.manageCookiesBtn.click();
-        await this.rejectAllBtn.click();
+        await this.allowNecessaryBtn.click();
+    }
+
+    public async waitToBeVisible(): Promise<void> {
+        try {
+            await this.banner.waitFor({ timeout: 10000 });
+        } catch (e) {
+            if (!this.page.isClosed() && (await this.geoBlockedHeader.isVisible())) {
+                throw new Error('site geo blocked!');
+            }
+            await debug(
+                this.page,
+                `There was the following error with the cookie banner. Was it there?\n    ${(e as Error).message}`,
+                'cookie-banner-error',
+            );
+            throw e;
+        }
     }
 
     /********************************************
@@ -64,7 +80,7 @@ export default class CookieBanner extends ComponentObject {
         });
     }
 
-    get rejectAllBtn(): Locator {
+    get allowNecessaryBtn(): Locator {
         return this.page.locator('.ot-pc-refuse-all-handler');
     }
 }

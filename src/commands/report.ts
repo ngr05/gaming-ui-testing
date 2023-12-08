@@ -1,6 +1,6 @@
 import { readdir } from 'fs/promises';
 
-import { Configuration, addPlan, closePlan, getConfigs, hostname, storeCommand } from '../testrail';
+import { Configuration, addPlan, closePlan, getConfigs, hostname, setUser, storeCommand } from '../testrail';
 import { runCmd } from './utils';
 
 export interface ReportOptions {
@@ -14,11 +14,12 @@ export default async (options: ReportOptions) => {
     const command = 'npx playwright show-report';
 
     if (options.testrail) {
-        if (!options.title) {
+        if (!options.key || !options.title || !options.username) {
             throw new Error(
                 'To report to testrail please ensure you provide a username, key and a title for the report. For more info run $ gput report --help',
             );
         }
+        setUser(options.username, options.key);
         const plan = await addPlan(options.title);
         console.log(`test plan created: ${hostname}/index.php?/plans/view/${plan}`);
         const configGrp = await getConfigs();

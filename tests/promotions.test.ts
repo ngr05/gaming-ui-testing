@@ -3,7 +3,7 @@
 import { Locator } from '@playwright/test';
 
 import { expect, test } from '../src/playwright';
-import { Product, skipOn } from '../src/product';
+import { Product, skipOn } from '../src/utils/product';
 import { getCookieObject } from '../src/config/cookies';
 
 // PLP = Promotions List Page
@@ -60,7 +60,7 @@ test.describe('Sky Gaming promotion tests', () => {
         container,
         promoPage,
     }, testInfo) => {
-        skipOn(Product.VEGAS, 'functionality not on vegas');
+        skipOn(Product.VEGAS, 'functionality not on vegas', testInfo);
 
         testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });
         testInfo.annotations.push({
@@ -140,7 +140,7 @@ test.describe('Sky Gaming promotion tests', () => {
     test('Test you can see time left for promotions @test @live @desktop @mobile @tablet', async ({
         promoPage,
     }, testInfo) => {
-        skipOn(Product.BINGO, 'no timers on Bingo');
+        skipOn(Product.BINGO, 'no timers on Bingo', testInfo);
 
         testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });
         testInfo.annotations.push({

@@ -44,6 +44,7 @@ export default abstract class ProductContainer extends PageObject {
     public async waitForUserToBeLoggedIn(): Promise<void> {
         await this.loginBtn.waitFor({ state: 'hidden' });
         await this.myAccountBtn.waitFor();
+        // await this.page.locator('#logged-in-menu').waitFor();
     }
 
     public async waitForUserToBeLoggedOut(): Promise<void> {

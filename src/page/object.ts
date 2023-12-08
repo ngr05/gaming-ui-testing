@@ -3,7 +3,7 @@ import { join } from 'path';
 
 import CookieBanner from '../components/cookieBanner.component';
 import Sidebar from '../components/sidebar.component';
-import { url } from '../product';
+import { url } from '../utils/product';
 import { Cookie } from '../config/cookies';
 
 export default abstract class PageObject {
@@ -28,7 +28,8 @@ export default abstract class PageObject {
     }
 
     public async goTo(path: string): Promise<void> {
-        await this.page.goto(join(url, path));
+        console.debug(`going to ${join(url, path)}`);
+        await this.page.goto(join(url, path), { waitUntil: 'load' });
         this.cookieBanner.dismissIfVisible().catch((err) => console.error(err));
         // await this.cookieBanner.dismissIfVisible();
         // try {

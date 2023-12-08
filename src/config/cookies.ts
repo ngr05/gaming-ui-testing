@@ -1,4 +1,4 @@
-import { url } from '../product';
+import { url } from '../utils/product';
 
 export interface Cookie {
     name: string;

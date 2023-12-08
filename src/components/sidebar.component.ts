@@ -69,7 +69,7 @@ export default class Sidebar extends ComponentObject {
     }
 
     get depositLimitBtn(): Locator {
-        return this.frame.locator('a[data-qa="depositLimitLink"]');
+        return this.frame.locator('a[data-qa="depositLimitsLink"]');
     }
 
     get coolOffBtn(): Locator {

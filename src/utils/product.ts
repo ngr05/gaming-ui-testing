@@ -1,4 +1,5 @@
-import { test } from './playwright';
+import { TestInfo } from 'playwright/test';
+import { test } from '../playwright';
 
 export let product: string;
 export let title: string;
@@ -39,6 +40,13 @@ if (!ENVIRONMENT || !validEnvs.includes(ENVIRONMENT)) {
 
 export const url = `https://www.${ENVIRONMENT !== 'live' ? `${ENVIRONMENT}.` : ''}${product}.com/`;
 
-export const skipOn = (product: Product, reason: string) => {
-    test.skip(process.env.PRODUCT === product, reason);
+export const skipOn = (product: Product | Product[], reason: string, testInfo: TestInfo) => {
+    testInfo.annotations.push({
+        type: 'testrail_result_comment',
+        description: `skipping test on ${process.env.PRODUCT}; ${reason}`,
+    });
+    if (!Array.isArray(product)) {
+        product = [product];
+    }
+    test.skip(product.includes(process.env.PRODUCT as Product), reason);
 };

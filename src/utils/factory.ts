@@ -2,12 +2,17 @@ import { Page } from '@playwright/test';
 
 import ProductContainer from '../components/productContainer.component';
 
+import GameInfo from '../page/gameInfo.page';
 import Homepage from '../page/home.page';
 import Promotions from '../page/promotions.page';
 
 import BingoContainer from '../components/bingo/productContainer.component';
 import CasinoContainer from '../components/casino/productContainer.component';
 import VegasContainer from '../components/vegas/productContainer.component';
+
+import BingoGameInfo from '../page/bingo/gameInfo.page';
+import CasinoGameInfo from '../page/casino/gameInfo.page';
+import VegasGameInfo from '../page/vegas/gameInfo.page';
 
 import BingoHomepage from '../page/bingo/home.page';
 import CasinoHomepage from '../page/casino/home.page';
@@ -27,6 +32,19 @@ export const getProductContainer = (page: Page): ProductContainer => {
             return new VegasContainer(page);
         default:
             throw new Error('cannot work out the right product container instance!');
+    }
+};
+
+export const getGameInfoPage = (page: Page): GameInfo => {
+    switch (process.env.PRODUCT) {
+        case 'bingo':
+            return new BingoGameInfo(page);
+        case 'casino':
+            return new CasinoGameInfo(page);
+        case 'vegas':
+            return new VegasGameInfo(page);
+        default:
+            throw new Error('cannot work out the right game info page instance!');
     }
 };
 

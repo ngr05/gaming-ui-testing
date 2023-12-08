@@ -1,7 +1,7 @@
 // @ts-check
 
 import { expect, test } from '../src/playwright';
-import { Product, skipOn } from '../src/product';
+import { Product, skipOn } from '../src/utils/product';
 
 test.describe('Safer Gambling testing', () => {
     test.beforeEach(async ({ setup }) => {
@@ -13,7 +13,7 @@ test.describe('Safer Gambling testing', () => {
     }, testInfo) => {
         testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });
 
-        skipOn(Product.BINGO, 'safer gambling works a bit different here');
+        skipOn(Product.BINGO, 'safer gambling works a bit different here', testInfo);
 
         testInfo.annotations.push({
             type: 'testrail_result_comment',
@@ -35,7 +35,7 @@ test.describe('Safer Gambling testing', () => {
     }, testInfo) => {
         testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });
 
-        skipOn(Product.BINGO, 'safer gambling works a bit different here');
+        skipOn(Product.BINGO, 'safer gambling works a bit different here', testInfo);
 
         testInfo.annotations.push({ type: 'testrail_result_comment', description: '1. login to the portal' });
         await container.login(account);

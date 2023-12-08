@@ -23,6 +23,7 @@ test.describe('Sky Bingo promotion tests', () => {
     }, testInfo) => {
         testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });
         testInfo.annotations.push({ type: 'testrail_result_comment', description: '1. go to the Sky Bingo home page' });
+        await homepage.goTo();
         testInfo.annotations.push({ type: 'testrail_result_comment', description: '2. log in' });
         await container.login(account);
         testInfo.annotations.push({

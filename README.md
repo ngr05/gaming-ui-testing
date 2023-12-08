@@ -132,6 +132,9 @@ The custom reporter will have created junit files for each of the browsers. Each
 with the TestRail CLI and uploaded to the test plan with the configuration that has been set up already for the browser.
 Once that is done, the test plan should be closed.
 
+Test cases are automatically created though the use of the TestRail CLI. As long as the Playwright IDs and folders are
+not changed, there will be no duplicates.
+
 ## Development
 
 ### Custom Fixtures
@@ -170,9 +173,10 @@ test('this is a test @silver @vegas @stage', async ({ homepage }) => {
 
 ## Things To Do...
 
--   Game launching tests
 -   Get videos stored and running in Jenkins artifacts
 -   Demonstrate CI capabilities of the tests
+    -   Report to TestRail from Jenkins
+    -   Add a flag to the parameters for whether to report into TestRail
     -   On failure, post to Slack
 -   Create a custom runner with commander?
     -   Document

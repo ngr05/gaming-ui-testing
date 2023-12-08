@@ -15,10 +15,13 @@ enum Products {
 
 export interface TestOptions {
     environment: Environments;
+    key?: string;
     product: Products;
     ui?: boolean;
+    tag?: string[];
     title?: string;
     testrail?: boolean;
+    username?: string;
 }
 
 export default async (options: TestOptions) => {
@@ -33,6 +36,9 @@ export default async (options: TestOptions) => {
     if (options.ui) {
         command = `${command}:ui`;
     }
+    if (options.tag) {
+        command = `${command} ${options.tag.map((tag: string) => `--grep ${tag}`).join(' ')}`;
+    }
     runCmd(command, {
         env: {
             ENVIRONMENT: options.environment,
@@ -42,6 +48,6 @@ export default async (options: TestOptions) => {
     });
 
     if (options.testrail && !options.ui) {
-        await report({ testrail: true, title: options.title });
+        await report({ ...options });
     }
 };

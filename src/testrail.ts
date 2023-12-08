@@ -5,8 +5,7 @@ import { join } from 'path';
  */
 const project = 30;
 
-const user = 'nicholas.green@flutteruki.com';
-const key = 'tNtO1qwKM9kQGbAPXOHr-TbloNX3y.TwgBi/88Fa9';
+let user: { key: string; username: string };
 
 /**
  * The TestRail host
@@ -90,7 +89,7 @@ const getOptions = (method: RequestMethod, body?: object): RequestOptions => {
         throw new Error('If you are posting you need a request body...');
     }
     const headers = new Headers();
-    headers.append('Authorization', `Basic ${btoa(`${user}:${key}`)}`);
+    headers.append('Authorization', `Basic ${btoa(`${user.username}:${user.key}`)}`);
     headers.append('Content-Type', 'application/json');
     const options: RequestOptions = {
         headers,
@@ -103,13 +102,17 @@ const getOptions = (method: RequestMethod, body?: object): RequestOptions => {
     return options;
 };
 
+export const setUser = (username: string, key: string) => {
+    user = { username, key };
+};
+
 export const storeCommand = (title: string, file: string, plan: number, config: number): string => {
     return `trcli \
         --yes \
         --host https://skybettingandgaming.testrail.com/ \
         --project "Gaming UI" \
-        --username ${user} \
-        --key "${key}" \
+        --username ${user.username} \
+        --key "${user.key}" \
         parse_junit \
         --plan-id "${plan}" \
         --config-ids "${config}" \
