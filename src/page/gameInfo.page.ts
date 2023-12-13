@@ -10,12 +10,10 @@ export default abstract class GameInfo extends PageObject {
 
     public async goTo(slug?: string): Promise<void> {
         const randomGame = getRandomGame();
-        console.debug('options: ', slug, randomGame);
         if (!slug && (!randomGame || randomGame.slug === '')) {
             throw new Error('no games configured for testing!');
         }
         const gameSlug = slug || randomGame.slug;
-        console.debug('going to', gameSlug);
         await super.goTo(join(this.slug, gameSlug));
         await this.page.waitForLoadState();
     }
@@ -29,7 +27,8 @@ export default abstract class GameInfo extends PageObject {
 
         const popup = await newPagePromise;
         const gameWindow = new GameWindow(popup);
-        await gameWindow.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
+        // this timeout is far too long but there are times where the page takes that long to load
+        await gameWindow.page.waitForLoadState('domcontentloaded', { timeout: 15000 });
         const container = await gameWindow.container();
         await container.waitFor();
 

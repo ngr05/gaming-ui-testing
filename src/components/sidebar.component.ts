@@ -20,8 +20,8 @@ export default class Sidebar extends ComponentObject {
 
     public async performLogin(account: Customer): Promise<void> {
         await this.waitToBeOpen();
-        await this.usernameInput.fill(account.username);
-        await this.pinInput.fill(account.pin);
+        await this.input(this.usernameInput, account.username);
+        await this.input(this.pinInput, account.pin);
         await this.loginBtn.click();
         await this.waitToBeClosed();
     }
@@ -30,6 +30,16 @@ export default class Sidebar extends ComponentObject {
         await this.waitToBeOpen();
         await this.logoutBtn.click();
         await this.waitToBeClosed();
+    }
+
+    private async input(locator: Locator, value: string, count = 0): Promise<void> {
+        await locator.fill(value);
+        if ((await locator.inputValue()) === '' && count < 10) {
+            await this.page.waitForTimeout(250);
+            await this.input(locator, value, ++count);
+        } else if ((await locator.inputValue()) === '') {
+            throw new Error('could not fill the input in 10 attempts!');
+        }
     }
 
     /********************************************

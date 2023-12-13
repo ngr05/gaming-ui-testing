@@ -17,6 +17,13 @@ export default class CookieBanner extends ComponentObject {
         await this.acceptAllBtn.click();
     }
 
+    public async disbleThirdPartyCookies(): Promise<void> {
+        await this.manageCookiesLink.click();
+        await this.thirdPartyCookieSwitch.click({ timeout: 5000 });
+        await this.confirmCookiePrefsBtn.click();
+        await this.page.waitForLoadState();
+    }
+
     public async dismissIfVisible(): Promise<void> {
         try {
             if (!this.cookiesDismissed || (await this.banner.isVisible())) {
@@ -80,7 +87,20 @@ export default class CookieBanner extends ComponentObject {
         });
     }
 
+    get manageCookiesLink(): Locator {
+        return this.page.locator('button[data-qa="footer-cookie-management"]');
+    }
+
     get allowNecessaryBtn(): Locator {
         return this.page.locator('.ot-pc-refuse-all-handler');
+    }
+
+    get thirdPartyCookieSwitch(): Locator {
+        // return this.page.locator('#ot-group-id-C0004');
+        return this.page.locator('[data-optanongroupid="C0004"] .ot-switch-nob');
+    }
+
+    get confirmCookiePrefsBtn(): Locator {
+        return this.page.locator('.onetrust-close-btn-handler');
     }
 }
