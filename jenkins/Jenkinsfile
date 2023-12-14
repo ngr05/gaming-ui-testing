@@ -37,7 +37,7 @@ pipeline {
             numToKeepStr: '100',        // only this number of build logs are kept.
             artifactDaysToKeepStr: '7'  // artifacts are only kept up to this days.
         ))
-        timeout(time: 5, unit: 'MINUTES')
+        timeout(time: 15, unit: 'MINUTES')
     }
 
     parameters {
