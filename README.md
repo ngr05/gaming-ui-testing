@@ -15,10 +15,17 @@ $ git clone git@github.com:ngr05/gaming-ui-testing.git
 $ npm install
 ```
 
+## CLI
+
+I have created a CLI tool that can make running these tests easier. As it is almost a separate thing, I have created a
+separate readme which can be found [here](CLI_README.md). The rest of this readme is writen with just direct NPM
+actions.
+
 ## Running the Tests
 
-The tests can be run either using the bundled Playwright browsers or using Sauce Labs. There are number of commands that
-have been created for either. They are the following...
+The tests can be run either using the bundled Playwright browsers or using Sauce Labs. The CLI tool has been created
+with making it easy to run the tests against any environment. If you would like to like to run the tests directly, there
+are number of commands that have been created. They are the following...
 
 | Command             | Description                                                                       |
 | ------------------- | --------------------------------------------------------------------------------- |
@@ -178,14 +185,12 @@ test('this is a test @silver @vegas @stage', async ({ homepage }) => {
     -   Report to TestRail from Jenkins
     -   Add a flag to the parameters for whether to report into TestRail
     -   On failure, post to Slack
--   Create a custom runner with commander?
-    -   Document
 
 ## Jenkins
 
 In order to work on a Jenkins Pipeline to run the tests, I have used a dockerised version in order to test. I used
 [these docs](https://www.jenkins.io/doc/book/installing/docker/) to run the instance. To start this instance, just run
-`./scripts/start-dev.sh`.
+`gput development`.
 
 This will start an instance of Jenkins at http://localhost:8080. The admin password will be output at the end of the dev
 script.
@@ -204,7 +209,7 @@ this repo.
 1. Go to [http://localhost:8080](http://localhost:8080)
 2. Input the admin password
 3. Install suggested plugins and wait for them to install
-4. Select `Skip and continue as admin`
+4. Select `Skip and continue as admin` (or you can create an account)
 5. `Save and Finish`
 6. `Start using Jenkins`
 7. `Create a job`

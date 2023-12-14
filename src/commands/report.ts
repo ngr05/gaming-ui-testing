@@ -11,8 +11,6 @@ export interface ReportOptions {
 }
 
 export default async (options: ReportOptions) => {
-    const command = 'npx playwright show-report';
-
     if (options.testrail) {
         if (!options.key || !options.title || !options.username) {
             throw new Error(
@@ -44,5 +42,5 @@ export default async (options: ReportOptions) => {
         return;
     }
 
-    runCmd(command);
+    runCmd('npx playwright show-report');
 };

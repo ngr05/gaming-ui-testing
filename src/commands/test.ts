@@ -1,13 +1,12 @@
 import report from './report';
 import { runCmd } from './utils';
 
-enum Environments {
+export enum Environments {
     LIVE = 'live',
-    NEXT = 'next',
     STAGING = 'staging',
-    TEST = 'test2',
+    TEST = 'test',
 }
-enum Products {
+export enum Products {
     BINGO = 'bingo',
     CASINO = 'casino',
     VEGAS = 'vegas',
@@ -31,17 +30,34 @@ export default async (options: TestOptions) => {
         );
     }
 
+    // validate inputs
+    if (!Object.values(Environments).includes(options.environment)) {
+        throw new Error(
+            `Please select a valid environment from ${Object.values(Environments).join(
+                ', ',
+            )}! Casino next environment is "test".`,
+        );
+    }
+    if (!Object.values(Products).includes(options.product)) {
+        throw new Error(`Please select a valid product from ${Object.values(Products).join(', ')}`);
+    }
+
     // let command = `PLAYWRIGHT_JUNIT_SUITE_NAME="Gaming UI Tests" ENVIRONMENT=${options.environment} PRODUCT=${options.product} npm run test`;
     let command = `npm run test`;
     if (options.ui) {
         command = `${command}:ui`;
     }
     if (options.tag) {
-        command = `${command} ${options.tag.map((tag: string) => `--grep ${tag}`).join(' ')}`;
+        command = `${command} --grep @${options.tag.map((tag: string) => `${tag}`).join('|@')}`;
     }
     runCmd(command, {
         env: {
-            ENVIRONMENT: options.environment,
+            ENVIRONMENT:
+                options.environment === Environments.TEST
+                    ? options.product === Products.CASINO
+                        ? 'next'
+                        : 'test2'
+                    : options.environment,
             PRODUCT: options.product,
             PLAYWRIGHT_JUNIT_SUITE_NAME: 'Gaming UI Tests',
         },
