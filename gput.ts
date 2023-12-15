@@ -23,6 +23,7 @@ program
 program
     .command('test')
     .description('Runs the tests')
+    .addOption(new Option('--ci', 'indicates the tests are running in CI'))
     .addOption(
         new Option('-e, --environment <environment>', 'the environment to test')
             .choices(Object.values(Environments))

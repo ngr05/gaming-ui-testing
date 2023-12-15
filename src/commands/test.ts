@@ -14,6 +14,7 @@ export enum Products {
 }
 
 export interface TestOptions {
+    ci: boolean;
     environment: Environments;
     key?: string;
     product: Products;
@@ -44,7 +45,7 @@ export default async (options: TestOptions) => {
     }
 
     // let command = `PLAYWRIGHT_JUNIT_SUITE_NAME="Gaming UI Tests" ENVIRONMENT=${options.environment} PRODUCT=${options.product} npm run test`;
-    let command = `npm run test`;
+    let command = 'npm run test';
     if (options.ui) {
         command = `${command}:ui`;
     }
@@ -52,17 +53,26 @@ export default async (options: TestOptions) => {
         command = `${command} --grep "@${options.tag.map((tag: string) => `${tag}`).join('|@')}"`;
     }
     console.log(`running: ${command}`);
+    let args: Record<string, string> = {
+        ENVIRONMENT:
+            options.environment === Environments.TEST
+                ? options.product === Products.CASINO
+                    ? 'next'
+                    : 'test2'
+                : options.environment,
+        PRODUCT: options.product,
+        PLAYWRIGHT_JUNIT_SUITE_NAME: 'Gaming UI Tests',
+    };
+
+    // if (options.ci) {
+    //     args = {
+    //         ...args,
+    //         PLAYWRIGHT_BROWSERS_PATH: '/usr/lib/playwright',
+    //     };
+    // }
+
     const run: SpawnSyncReturns<Buffer> = runCmd(command, {
-        env: {
-            ENVIRONMENT:
-                options.environment === Environments.TEST
-                    ? options.product === Products.CASINO
-                        ? 'next'
-                        : 'test2'
-                    : options.environment,
-            PRODUCT: options.product,
-            PLAYWRIGHT_JUNIT_SUITE_NAME: 'Gaming UI Tests',
-        },
+        env: args,
     });
 
     if (options.testrail && !options.ui) {

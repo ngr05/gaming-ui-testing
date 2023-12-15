@@ -53,6 +53,7 @@ as you would like and only those tests will be executed.
 
 |             | Long                        | Short            | Description                                                           | Example                           |
 | ----------- | --------------------------- | ---------------- | --------------------------------------------------------------------- | --------------------------------- |
+| ci          | --ci                        |                  | Indicates the tests are running in CI                                 | gput test --ci                    |
 | environment | --environment <environment> | -e <environment> | The environment to test (choices: "live", "next", "staging", "test2") | gput test -e test2                |
 | key         | --key <key>                 | -k <key>         | The user's api key                                                    | gput test -k something            |
 | product     | --product <product>         | -p <product>     | The product to test (choices: "bingo", "casino", "vegas")             | gput test -p bingo                |

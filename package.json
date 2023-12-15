@@ -31,7 +31,7 @@
         "test:vegas:live": "ENVIRONMENT=live PRODUCT=vegas npm test",
         "test:vegas:preprod": "concurrently \"npm run test:vegas:test\" \"npm run test:vegas:staging\"",
         "testrail:report": "./testrail-report.sh",
-        "prepare": "husky install && playwright install"
+        "prepare": "playwright install"
     },
     "keywords": [],
     "author": "Nick Green <nicholas.green@flutteruki.com>",
@@ -46,7 +46,6 @@
         "eslint": "^8.50.0",
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-playwright": "^0.16.0",
-        "husky": "^8.0.0",
         "prettier": "^3.0.3",
         "saucectl": "^0.161.1",
         "typescript": "^5.2.2"
@@ -66,10 +65,10 @@
     },
     "dependencies": {
         "commander": "^11.0.0",
-        "playwright": "^1.40.0",
-        "playwright-chromium": "^1.11.1",
-        "playwright-firefox": "^1.11.1",
-        "playwright-webkit": "^1.11.1",
+        "playwright": "^1.40.1",
+        "playwright-chromium": "^1.40.1",
+        "playwright-firefox": "^1.40.1",
+        "playwright-webkit": "^1.40.1",
         "ts-node": "^10.9.1"
     },
     "bin": {
