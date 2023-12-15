@@ -23,7 +23,7 @@ pipeline {
     agent {
         docker {
             args '--net host -u root:root'
-            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+            image 'mcr.microsoft.com/playwright:v1.40.0-jammy'
         }
     }
 

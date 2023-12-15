@@ -20,9 +20,9 @@ const gaCookiesTests: CookieTestCase[] = [
 ];
 const value = 'testing';
 
-test.describe('cookies testing', () => {
+test.describe('@cookies testing', () => {
     test.describe('when cookies are approved', () => {
-        test.describe('google analytics', () => {
+        test.describe('@google analytics', () => {
             gaCookiesTests.forEach((tc: CookieTestCase) => {
                 test(`check for ${tc.title} cookie when cookies are accepted`, async ({ page }, testInfo) => {
                     testInfo.annotations.push({ type: 'testrail_case_field', description: 'ref:GUT-1' });

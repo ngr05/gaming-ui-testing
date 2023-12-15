@@ -1,3 +1,4 @@
+import { SpawnSyncReturns } from 'child_process';
 import report from './report';
 import { runCmd } from './utils';
 
@@ -48,9 +49,10 @@ export default async (options: TestOptions) => {
         command = `${command}:ui`;
     }
     if (options.tag) {
-        command = `${command} --grep @${options.tag.map((tag: string) => `${tag}`).join('|@')}`;
+        command = `${command} --grep "@${options.tag.map((tag: string) => `${tag}`).join('|@')}"`;
     }
-    runCmd(command, {
+    console.log(`running: ${command}`);
+    const run: SpawnSyncReturns<Buffer> = runCmd(command, {
         env: {
             ENVIRONMENT:
                 options.environment === Environments.TEST
@@ -66,4 +68,5 @@ export default async (options: TestOptions) => {
     if (options.testrail && !options.ui) {
         await report({ ...options });
     }
+    process.exit(run.status || 1);
 };
